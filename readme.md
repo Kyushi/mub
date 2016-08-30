@@ -1,4 +1,4 @@
-*This is a work in progress and not fully funcitonal yet.*
+*This is a work in progress and not fully functional yet.*
 
 # tellmeallaboutit #
 
