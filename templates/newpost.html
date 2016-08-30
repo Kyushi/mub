@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% block title %}Write a post{% endblock %}
+
+{% block content %}
+
+<section class="submission-form">
+  <h2 class="section-header">Post your submission</h2>
+  <form method="post">
+    <label>
+      <div class="input-title">Title: </div>
+      <input type="text" name="subject" value="{{subject}}" class="title-input">
+    </label>
+    <br>
+    <br>
+    <label>
+      <div class="input-title">Type your thoughts here: </div>
+      <textarea name="content" class="entry-input">{{content}}</textarea>
+    </label>
+    <br>
+    {% if error %}
+      <div class="error" style="color: red;">{{error}}</div>
+      <br>
+    {% endif %}
+    <button>tell us what you think</button>
+
+  </form>
+</section>
+
+<hr>
+<br>
+<!-- display blog entries -->
+<section class="blog-entries">
+  <h2 class="section-header">Read blog entries:</h2>
+  {% for entry in entries %}
+  <article class="blog-article">
+    <div class="entry-title col-9"><h3>{{entry.subject}}</h3></div>
+    <div class="date col-3">{{entry.created.strftime("%d %B %Y, %H:%M")}}, by {{entry.author}}</div>
+    <div class="entry-text col-12"><p class="entry">{{entry.render() |safe }}</p></div>
+    <div class="padded small col-1"><a href="/{{entry.key.id()}}">Permalink</a></div>
+    <div class="grey small date col-1">
+    <!-- Show edit link only for own blog posts -->
+      {% if user %}
+        {% if user.key.id() == entry.author_key %}
+          <a href="/editpost/{{entry.key.id()}}">Edit</a>
+        {% endif %}
+      {% endif %}
+    </div>
+    <div class="col-1"></div>
+    <div class="col-1">
+      <p class="small padded">
+        <a href="#" class="like" data-key="{{entry.key.id()}}">↑ <span>{{entry.likes}}</span> Likes</a>
+      </p>
+    </div>
+    <div class="error col-4 padded small">{{error}}</div>
+    <div class="padded grey small date col-4">
+      <!-- show edited time and date only if post has been edited -->
+      {% if entry.last_modified %}
+        Edited {{entry.last_modified.strftime("%d %B %Y, %H:%M")}}
+      {% endif %}
+    </div>
+
+    <!-- add div for all comments -->
+    <div class="comments col-12 padded">
+      <!-- show only if comments exist -->
+      {% if comments %}
+        <!-- loop over all comments of respective blog post -->
+        {% for comment in comments%}
+          <div class="single-comment">
+            <p>{{comment.content}}</p>
+          </div>
+        {% endfor %}
+      <!-- show that there is no comment if there aren't any -->
+      {% else %}
+        <p class="grey small">No comment yet</p>
+      {% endif %}
+    </div>
+  </article>
+  {% endfor %}
+
+</section>
+
+{% endblock %}

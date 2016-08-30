@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block title %}Login{% endblock %}
+
+{% block menu %}{{ super() }}{% endblock %}
+
+{% block content %}
+<section class="login-form">
+  <h2 class="section-header">Please fill in the required fields below:</h2>
+  <form method="post">
+    <table>
+      <tr>
+        <td>
+          <p>Username: </p>
+        </td>
+        <td>
+          <input type="text" name="username" value="{{username}}">
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <p>Password: </p>
+        </td>
+        <td>
+          <input type="password" name="password" value="">
+        </td>
+      </tr>
+      {% if error %}
+        <tr>
+          <td colspan="2">
+            <p class="error">{{error}}</p>
+          </td>
+        </tr>
+      {% endif %}
+      <tr>
+        <td colspan="2">
+          <input type="submit" value="Show me my stuff">
+        </td>
+      </tr>
+    </table>
+    <div class="cannot-login">
+      <p>No login data? <a href="/signup">Sign up here</a></p>
+      <p>Forgot your password? We'll build something for that case soon.</p>
+    </div>
+  </form>
+</section>
+
+<div class="debug">
+  {{var1}}<br>
+  {{var2}}<br>
+  {{var3}}<br>
+</div>
+
+{% endblock %}

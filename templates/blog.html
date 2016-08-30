@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block title %}Read the blog{% endblock %}
+
+{% block content %}
+
+<!-- display blog entries -->
+<section class="blog-entries">
+  <h2 class="section-header">Read blog entries:</h2>
+  {% for entry in entries %}
+  <article class="blog-article">
+    <div class="entry-title col-9"><h3>{{entry.subject}}</h3></div>
+    <div class="date col-3">{{entry.created.strftime("%d %B %Y, %H:%M")}}, by {{entry.author}}</div>
+    <div class="entry-text col-12"><p class="entry">{{entry.render() |safe }}</p></div>
+    <div class="padded small col-1"><a href="/{{entry.key.id()}}">Permalink</a></div>
+    <div class="grey small padded col-1">
+    <!-- Show edit link only for own blog posts -->
+      {% if user %}
+        {% if user.key.id() == entry.author_key %}
+          <a href="/editpost/{{entry.key.id()}}">Edit</a>
+        {% endif %}
+      {% endif %}
+    </div>
+    <div class="col-1 small padded">
+      <p>
+        <a href="#" class="like" data-key="{{entry.key.id()}}">↑ <span>{{entry.likes}}</span> Likes</a>
+      </p>
+    </div>
+    <div class="col-1 grey small padded">
+      {% if user %}
+        {% if user.key.id() in entry.liked_by %}
+          <p class="you-like">You like this</p>
+        {% endif %}
+      {% endif %}
+    </div>
+    <div class="col-4 padded small">
+      <p class="error">{{error}}<p>
+    </div>
+    <div class="padded grey small date col-4">
+      <!-- show edited time and date only if post has been edited -->
+      {% if entry.last_modified %}
+        Edited {{entry.last_modified.strftime("%d %B %Y, %H:%M")}}
+      {% endif %}
+    </div>
+
+    <!-- add div for all comments -->
+    <div class="col-12 padded">
+      <p class="error">{{error}}</p>
+      <!-- show comment text input if user is logged in -->
+      {% if user %}
+        <form method="post" class="comment-input">
+          <label>
+            <textarea name="comment" class="comment-input" placeholder="No comment yet" data-parentid={{entry.key.id()}}></textarea>
+            <input type="hidden" name="parent" value="{{entry.key.id()}}">
+            <button>Say it</button>
+          </label>
+        </form>
+      {% endif %}
+      <!-- show only if comments exist -->
+      {% if comments %}
+        <!-- loop over all comments of respective blog post -->
+        {% block comments %}{% endblock %}
+      {% endif %}
+    </div>
+  </article>
+  {% endfor %}
+
+</section>
+
+{% endblock %}

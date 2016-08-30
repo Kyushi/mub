@@ -1,0 +1,13 @@
+{% extends "blog.html" %}
+
+  {% block comments %}
+
+    {% if comments %}
+      {% for comment in comments%}
+        <div class="single-comment">
+          <p>{{comment.content}}</p>
+        </div>
+      {% endfor %}
+    {% endif %}
+
+  {% endblock %}

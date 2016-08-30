@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block title %}Edit a post{% endblock %}
+
+{% block content %}
+
+<section class="submission-form">
+  <h2 class="section-header">Edit your post</h2>
+  <form method="post">
+    <label>
+      <div class="input-title">Title: </div>
+      <input type="text" name="subject" value="{{entry.subject}}" class="title-input">
+    </label>
+    <br>
+    <br>
+    <label>
+      <div class="input-title">Change your thoughts here: </div>
+      <textarea name="content" class="entry-input">{{entry.content}}</textarea>
+    </label>
+    <br>
+    {% if error %}
+      <div class="error" style="color: red;">{{error}}</div>
+      <br>
+    {% endif %}
+    <button>save your thoughts</button>
+    | <a href="/">cancel</a>
+
+  </form>
+</section>
+
+{% endblock %}

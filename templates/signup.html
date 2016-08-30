@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block title %}Signup{% endblock %}
+
+{% block content %}
+<section class="signup-form">
+  <h2 class="section-header">Please fill in the required fields below:</h2>
+  <form method="post">
+    <table>
+      <tr>
+        <td>
+          <p>Please enter a username: </p>
+        </td>
+        <td>
+          <input type="text" name="username" value="{{username}}">
+        </td>
+        <td>
+          <p class="error-text">{{error1}}</p>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <p>Please enter a safe password: </p>
+        </td>
+        <td>
+          <input type="password" name="password" value={{password}}>
+        </td>
+        <td>
+          <p class="error-text">{{error2}}</p>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <p>Please verify your password: </p>
+        </td>
+        <td>
+          <input type="password" name="verify" value={{verify}}>
+        </td>
+        <td>
+          <p class="error-text">{{error3}}</p>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <p>Please enter en e-mail address (optional): </p>
+        </td>
+        <td>
+          <input type="text" name="email" value="{{email}}">
+        </td>
+        <td>
+          <p class="error-text">{{error4}}</p>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="3">
+          <input type="submit" value="Please let me in">
+        </td>
+      </tr>
+    </table>
+  </form>
+  <div class="to-login col-12">
+    <p>Already signed up? <a href="/login">Login here</a></p>
+  </div>
+</section>
+{% endblock %}

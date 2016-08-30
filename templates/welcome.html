@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block title %}Welcome, {{user.name_by_user}}{% endblock %}
+
+{% block content %}
+<section class="success">
+  <h2 class="section-header">Welcome, {{user.name_by_user}}!</h2>
+  <a href="/logout">Log Out</a>
+</section>
+{% endblock %}
