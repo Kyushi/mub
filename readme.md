@@ -1,4 +1,4 @@
-#### <span color="red"> ** This is a work in progress and not fully funcitonal yet. ** </span> ####
+*This is a work in progress and not fully funcitonal yet.*
 
 # tellmeallaboutit #
 
