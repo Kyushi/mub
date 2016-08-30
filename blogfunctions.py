@@ -18,18 +18,30 @@ class CommentHandler(GeneralHandler):
             parent = Entries.get_by_id(int(self.request.get('parent')))
             entries = self.get_entries(100)
             comments = self.get_comments(100)
-            uid = self.user.key.id()
+            author_id = self.user.key.id()
+            author_name = self.user.name_by_user
             if not comment:
-                self.render('comments.html', entries = entries, comments = comments, error = "Please type a comment" )
+                return
             else:
                 c = Comment(content = comment,
-                            author = uid,
+                            author_id = author_id,
+                            author_name = author_name,
                             parent = parent.key)
-                c_key = c.put()
-                comments = Comment.query(ancestor=entry.key).fetch()
-                self.render('comments.html', entries = entries, comments = comments)
+                c.put()
+                comment = self.render_single_comment(c)
+                self.write(json.dumps(({'comment': comment})))
         else:
             self.redirect('/error', error = "Commenting is for registered users only")
+
+    def render_single_comment(self, comment):
+        html = '''
+        <div class="single-comment">
+            <p class="grey small">%s said:</p>
+            <p>%s</p>
+        </div>
+        ''' % (comment.author_name, comment.content)
+        return html
+
 
 
 # New post page for submitting an entry

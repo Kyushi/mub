@@ -31,10 +31,15 @@ class Entries(ndb.Model):
         self._render_text = self.content.replace('\n', '\n<br>')
         return self._render_text
 
+    def comments(self):
+        self.comments = Comment.query(ancestor=self.key).order(-Comment.created).fetch()
+        return self.comments
+
 # Model for comments:
 class Comment(ndb.Model):
     content = ndb.StringProperty(required=True)
-    author = ndb.IntegerProperty(required = True)
+    author_id = ndb.IntegerProperty(required = True)
+    author_name = ndb.StringProperty(required = True)
     created = ndb.DateTimeProperty(auto_now_add = True)
     last_modified = ndb.DateTimeProperty()
     likes = ndb.IntegerProperty()

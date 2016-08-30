@@ -3,7 +3,9 @@
 {% block title %}Read the blog{% endblock %}
 
 {% block content %}
-
+<!-- if we're on the newpost page, the blog post form gets rendered in here -->
+{% block newpost %}
+{% endblock %}
 <!-- display blog entries -->
 <section class="blog-entries">
   <h2 class="section-header">Read blog entries:</h2>
@@ -44,23 +46,33 @@
     </div>
 
     <!-- add div for all comments -->
-    <div class="col-12 padded">
+    <div class="col-12 padded comments small">
       <p class="error">{{error}}</p>
       <!-- show comment text input if user is logged in -->
-      {% if user %}
-        <form method="post" class="comment-input">
-          <label>
-            <textarea name="comment" class="comment-input" placeholder="No comment yet" data-parentid={{entry.key.id()}}></textarea>
-            <input type="hidden" name="parent" value="{{entry.key.id()}}">
-            <button>Say it</button>
-          </label>
-        </form>
-      {% endif %}
-      <!-- show only if comments exist -->
-      {% if comments %}
-        <!-- loop over all comments of respective blog post -->
-        {% block comments %}{% endblock %}
-      {% endif %}
+    {% if user %}
+      <div class="comment-placeholder col-2">
+        <p>Say something about it</p>
+      </div>
+      <form method="post" class="comment-input-form">
+        <label>
+          <textarea name="comment" class="comment-input" placeholder="Say your piece"></textarea>
+          <a href="#" data-parentid="{{entry.key.id()}}" class="submit-button col-1">Say it</a>
+        </label>
+      </form>
+      {% if error %}
+        <div class="col-12 padded small">
+          <p class="error">
+            {{error}}
+          </p>
+        </div>
+      {%endif %}
+    {% endif %}
+        {% for comment in entry.comments() %}
+        <div class="single-comment">
+            <p class="grey small">{{comment.author_name}} said:</p>
+            <p>{{comment.content}}</p>
+        </div>
+        {% endfor %}
     </div>
   </article>
   {% endfor %}

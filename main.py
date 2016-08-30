@@ -12,13 +12,12 @@ from likes import LikeHandler
 class MainPage(GeneralHandler):
     def get(self):
         entries = self.get_entries(100)
-        comments = self.get_comments(100)
         user = self.user
         if user:
             username = user.name_by_user
-            self.render('comments.html', entries = entries, comments = comments, user = user)
+            self.render('blog.html', entries = entries, user = user)
         else:
-            self.render('comments.html', entries = entries, comments = comments)
+            self.render('blog.html', entries = entries)
 
 
 # make things work
