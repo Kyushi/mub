@@ -9,7 +9,7 @@ This is a multi user blog project written in Python 2.7 for Google App Engine
 * Google App Engine Launcher (>= 1.9.37)
 * Python 2.7
 * Web Browser
-___
+---
 ### ** Quickstart ** ###
 
 * Clone or download this repository from https://github.com/Kyushi/mub.git
