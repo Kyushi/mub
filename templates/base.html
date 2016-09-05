@@ -31,7 +31,7 @@
           <div class="col-12 menu">
             <a href="/" class="menu-item">Home</a>
             {% if user %}
-              <a href="/newpost" class="menu-item">Write a new entry</a>
+              <a href="/newpost" class="menu-item">Write a new post</a>
               <p class="menu-item">Logged in as: {{user.name_by_user}}</p>
               <a href="/logout" class="menu-item">Logout</a>
             {% else %}
@@ -51,6 +51,6 @@
 
     </div>
     <!-- add ajax script at bottom of page so everything is loaded before the script -->
-    <script src="js/script.js"></script>
+    <script src="/js/script.js"></script>
   </body>
 </html>

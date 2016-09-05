@@ -16,8 +16,8 @@ jinja_env = jinja2.Environment(loader = jinja2.FileSystemLoader(template_dir),
                                autoescape = True)
 
 
-# Model for blog Entries
-class Entries(ndb.Model):
+# Model for blog Post
+class Post(ndb.Model):
     subject = ndb.StringProperty(required = True)
     content = ndb.TextProperty(required = True)
     created = ndb.DateTimeProperty(auto_now_add = True)
@@ -119,8 +119,8 @@ class GeneralHandler(webapp2.RequestHandler):
         self.write(self.render_str(template, **kw))
 
     def get_entries(self, n=10):
-        e = Entries.query()
-        e = e.order(-Entries.created)
+        e = Post.query()
+        e = e.order(-Post.created)
         entr = e.fetch(n)
         return entr
 
@@ -130,13 +130,33 @@ class GeneralHandler(webapp2.RequestHandler):
         comments = c.fetch()
         return comments
 
+    # TODO: render with edit and delete links
+    def render_single_comment(self, comment):
+        html = '''
+                <div class="single-comment">
+                    <p class="grey small">%s said:</p>
+                    <p>%s</p>
+        ''' % (comment.author_name, comment.content)
+        if comment.author_name != "System":
+            html += '''
+                        <a href="#" class="edit">Edit</a> |
+                        <a href="/delete" data-ids="%d;%d" class="delete">Delete</a>
+                    </div>
+                    ''' % (comment.key.id(), comment.key.parent().id())
+        else:
+            html += "\n</div>"
+        return html
+
+    def get_referrer(self):
+        return self.request.referer or "/"
+
     def render_blog(self, page, **kw):
-        e = Entries.query()
-        e = e.order(-Entries.created)
-        entries = e.fetch(10)
-        for entry in entries:
-            print("Entry: %s" % str(entry))
-        self.render(page, entries = entries, **kw)
+        e = Post.query()
+        e = e.order(-Post.created)
+        posts = e.fetch(10)
+        for post in posts:
+            print("Entry: %s" % str(post))
+        self.render(page, posts = posts, **kw)
 
     def set_secure_cookie(self, name, val):
         cookie_val = make_secure_val(val.lower())

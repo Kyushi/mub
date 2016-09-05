@@ -4,20 +4,20 @@ from handler import GeneralHandler
 from login import LoginHandler
 from logout import LogoutHandler
 from signup import RegisterHandler, WelcomeHandler
-from blogfunctions import NewPostHandler, PermalinkHandler, EditPostHandler, CommentHandler
+from blogfunctions import NewPostHandler, PermalinkHandler, EditPostHandler, CommentHandler, EditCommentHandler, DeleteHandler
 from likes import LikeHandler
 
 
-# Main page displays only blog entries and menu
+# Main page displays only blog posts and menu
 class MainPage(GeneralHandler):
     def get(self):
-        entries = self.get_entries(100)
+        posts = self.get_entries(100)
         user = self.user
         if user:
             username = user.name_by_user
-            self.render('blog.html', entries = entries, user = user)
+            self.render('blog.html', posts = posts, user = user)
         else:
-            self.render('blog.html', entries = entries)
+            self.render('blog.html', posts = posts)
 
 
 # make things work
@@ -31,5 +31,7 @@ app = webapp2.WSGIApplication([
     ('/login', LoginHandler),
     ('/logout', LogoutHandler),
     ('/like', LikeHandler),
-    ('/comment', CommentHandler)
+    ('/comment', CommentHandler),
+    ('/editcomment', EditCommentHandler),
+    ('/delete', DeleteHandler)
     ], debug=True)

@@ -4,7 +4,7 @@
 
 {% block newpost %}
 <section class="submission-form">
-  <h2 class="section-header">Post your submission</h2>
+  <h2 class="section-header">Tell us something</h2>
   <form method="post">
     <label>
       <div class="input-title">Title: </div>
@@ -14,14 +14,15 @@
     <br>
     <label>
       <div class="input-title">Type your thoughts here: </div>
-      <textarea name="content" class="entry-input">{{content}}</textarea>
+      <textarea name="content" class="post-input">{{content}}</textarea>
     </label>
     <br>
     {% if error %}
       <div class="error" style="color: red;">{{error}}</div>
       <br>
     {% endif %}
-    <button>tell us what you think</button>
+    <button>let everybody know</button>
+    <a href="{{referrer}}" class="small">cancel</a>
 
   </form>
 </section>

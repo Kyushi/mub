@@ -28,7 +28,7 @@ class SignupHandler(GeneralHandler):
         self.username = self.request.get("username")
         self.password = self.request.get("password")
         self.verify = self.request.get("verify")
-        self.email = self.request.get("email", "")
+        self.email = self.request.get("email")
         self.error1 = self.error2 = self.error3 = self.error4 = ""
 
         # validate user input
@@ -36,6 +36,7 @@ class SignupHandler(GeneralHandler):
         valid_password = validate_pw(self.password)
         valid_verify = verify_password(self.password, self.verify)
         valid_email = validate_email(self.email)
+        print('Valid email: ', valid_email)
 
         # set error messages if validation fails
         if not valid_username:

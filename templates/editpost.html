@@ -9,21 +9,21 @@
   <form method="post">
     <label>
       <div class="input-title">Title: </div>
-      <input type="text" name="subject" value="{{entry.subject}}" class="title-input">
+      <input type="text" name="subject" value="{{post.subject}}" class="title-input">
     </label>
     <br>
     <br>
     <label>
-      <div class="input-title">Change your thoughts here: </div>
-      <textarea name="content" class="entry-input">{{entry.content}}</textarea>
+      <div class="input-title">Change your story here: </div>
+      <textarea name="content" class="post-input">{{post.content}}</textarea>
     </label>
     <br>
     {% if error %}
       <div class="error" style="color: red;">{{error}}</div>
       <br>
     {% endif %}
-    <button>save your thoughts</button>
-    | <a href="/">cancel</a>
+    <button>rewrite your story</button>
+     <a href="{{referrer}}" class="small">cancel</a>
 
   </form>
 </section>
