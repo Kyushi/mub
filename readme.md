@@ -3,10 +3,12 @@
 # tellmeallaboutit #
 
 
- ###### Udacity full stack nanodegree (FSND) multi user blog project ######
-
+ ### Udacity full stack nanodegree (FSND) multi user blog project ###
 
 This is a multi user blog project written in Python 2.7 for Google App Engine
+
+You can view it live here:
+http://fsnd-mub-project.appspot.com/
 
 ### Requirements for local deployment ###
 

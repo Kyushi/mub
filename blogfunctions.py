@@ -96,52 +96,38 @@ class PermalinkHandler(GeneralHandler):
 
         self.render('/blog.html', posts = [post], user = self.user)
 
-# TODO: Implement the following:
-# DeleteHandler handles deletion of Posts and comments by replacing the content
-# with a default notice and the author to a default setting. Everything else
-# gets initialised
+# DeleteHandler handles deletion of Posts and comments
 class DeleteHandler(GeneralHandler):
     def post(self):
+        if not self.user:
+            self.redirect('/login')
         ids = self.request.get('ids')
-        print("IDs: %s" % ids)
         if ';' in ids:
-            print("It's a comment")
             data = ids.split(';')
             parentid = int(data[1])
             entityid = int(data[0])
-            comment = self.delete_comment(parentid, entityid)
-            self.write(json.dumps(({'comment': self.render_single_comment(comment)})))
+            self.delete_comment(parentid, entityid)
+            self.write(json.dumps(({})))
         else:
-            print("It's a post")
             self.delete_post(int(ids))
-            self.redirect(self.request.referer)
+            self.write(json.dumps(({})))
 
     def delete_comment(self, parentid, entityid):
         parent_key = Post.get_by_id(parentid).key
-        print "pk", parent_key
         comment = Comment.get_by_id(entityid, parent_key)
-        comment.content = "This comment was deleted by the user"
-        comment.author_name = "System"
-        comment.author_id = 0
-        comment.created = datetime.datetime.now()
-        comment.last_modified = None
-        comment.likes = 0
-        comment.liked_by = []
-        comment.put()
-        return comment
+        comment_key = comment.key
+        if self.user.key.id() == comment.author_id:
+            comment_key.delete()
+        return
 
     def delete_post(self, entityid):
         post = Post.get_by_id(entityid)
-        post.subject = "Deleted Post"
-        post.content = "This post was deleted by the user"
-        post.author = "System"
-        post.author_key = 0
-        post.created = datetime.datetime.now()
-        post.last_modified = None
-        post.likes = 0
-        post.liked_by = []
-        post.put()
-        return post
+        post_key = post.key
+        if self.user.key.id() == post.author_key:
+            post_key.delete()
+        else:
+            print("You are not authorised to delete this comment\nUser ID: %d\nAuthor ID: %d" % (self.user.key.id(), post.author_key))
+        return
 
 
 # Everything for comments below

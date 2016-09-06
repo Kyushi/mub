@@ -32,3 +32,5 @@ class LikeHandler(GeneralHandler):
         else:
             error = "You have to be logged in to post, comment or like"
             self.write(json.dumps(({'error': error})))
+            self.redirect('/login')
+            print "Redirected"

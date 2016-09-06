@@ -140,7 +140,7 @@ class GeneralHandler(webapp2.RequestHandler):
         if comment.author_name != "System":
             html += '''
                         <a href="#" class="edit">Edit</a> |
-                        <a href="/delete" data-ids="%d;%d" class="delete">Delete</a>
+                        <a href="#" data-ids="%d;%d" class="delete">Delete</a>
                     </div>
                     ''' % (comment.key.id(), comment.key.parent().id())
         else:
