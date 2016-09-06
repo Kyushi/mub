@@ -124,7 +124,7 @@ class DeleteHandler(GeneralHandler):
         post = Post.get_by_id(entityid)
         post_key = post.key
         if self.user.key.id() == post.author_key:
-            post_key.delete()
+            ndb.delete_multi(ndb.Query(ancestor=post_key).iter(keys_only = True))
         else:
             print("You are not authorised to delete this comment\nUser ID: %d\nAuthor ID: %d" % (self.user.key.id(), post.author_key))
         return
