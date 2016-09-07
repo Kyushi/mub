@@ -15,7 +15,7 @@ jinja_env = jinja2.Environment(loader = jinja2.FileSystemLoader(template_dir),
 
 
 
-# New post page for submitting an post
+# New post page for writing a post
 class NewPostHandler(GeneralHandler):
     def get(self):
         user = self.user
@@ -24,9 +24,8 @@ class NewPostHandler(GeneralHandler):
         else:
             username = self.user.name_by_user
             posts = self.get_entries(5)
-            referrer = self.get_referrer()
-            print("Referrer on newpost: %s" % referrer)
-            self.render('newpost.html',
+            referrer = self.get_referrer() # referrer that allows to return to
+            self.render('newpost.html',    #  the previous page on cancel
                         posts = posts,
                         user = user,
                         referrer = referrer)
@@ -48,7 +47,7 @@ class NewPostHandler(GeneralHandler):
             entry_id = e.key.id() # get its id and
             self.redirect('/%d' % entry_id) # show a single blog post
 
-        # if there's no title or no post or neither, display error message and
+        # if there's no title or no post or neither, display error message
         else:
             error = "Subject + Content = Valid Submission"
             self.render('newpost.html',
@@ -56,51 +55,54 @@ class NewPostHandler(GeneralHandler):
                         content=content,
                         error=error)
 
+# Handler for editing posts
 class EditPostHandler(GeneralHandler):
     def get(self, entry_id):
-        post = Post.get_by_id(int(entry_id))
-        has_error = False
-        user = self.user
-        referrer = self.get_referrer()
-        if not post:
-            print "there's no post"
-            error = "This post does not exist"
-            has_error = True
-        if has_error:
-            self.render('error.html', error = error)
-        if not user:
+        if not self.user:
             self.redirect('/login')
-        elif not user.name_by_user == post.author:
-            error = "You cannot edit someone else's post"
-            has_error = True
         else:
-            self.render('/editpost.html', user = user, post = post, referrer = referrer)
+            post = Post.get_by_id(int(entry_id))
+            has_error = False
+            user = self.user
+            referrer = self.get_referrer()
+            if not post:
+                error = "This post does not exist"
+                has_error = True
+            elif not user.name_by_user == post.author:
+                error = "You cannot edit someone else's post"
+                has_error = True
+            if has_error:
+                self.render('error.html', error = error)
+            else:
+                self.render('/editpost.html', user = user, post = post, referrer = referrer)
 
 
     def post(self, entry_id):
-        subject = self.request.get('subject')
-        content = self.request.get('content')
         post = Post.get_by_id(int(entry_id))
-        post.subject = subject
-        post.content = content
+        post.subject = self.request.get('subject')
+        post.content = self.request.get('content')
         post.last_modified = datetime.datetime.now()
         post.put()
         self.redirect('/%d' % int(entry_id))
 
+# Handler that allows for posts to have a permalink (post ID). If post doesn't
+# exist, display error message
 class PermalinkHandler(GeneralHandler):
     def get(self, entry_id):
         post = Post.get_by_id(int(entry_id))
         if not post:
-            self.error(404)
+            self.render('error.html', error = "This post doesn't exist")
             return
 
         self.render('/blog.html', posts = [post], user = self.user)
 
-# DeleteHandler handles deletion of Posts and comments
+# DeleteHandler handles deletion of posts and comments
 class DeleteHandler(GeneralHandler):
     def post(self):
         if not self.user:
             self.redirect('/login')
+
+        #ids can be either comment and parent id or only post id
         ids = self.request.get('ids')
         if ';' in ids:
             data = ids.split(';')
@@ -112,6 +114,7 @@ class DeleteHandler(GeneralHandler):
             self.delete_post(int(ids))
             self.write(json.dumps(({})))
 
+    # function to delete comment from datastore
     def delete_comment(self, parentid, entityid):
         parent_key = Post.get_by_id(parentid).key
         comment = Comment.get_by_id(entityid, parent_key)
@@ -120,21 +123,23 @@ class DeleteHandler(GeneralHandler):
             comment_key.delete()
         return
 
+    # function to delete post and all children from datastore
     def delete_post(self, entityid):
         post = Post.get_by_id(entityid)
         post_key = post.key
         if self.user.key.id() == post.author_key:
             ndb.delete_multi(ndb.Query(ancestor=post_key).iter(keys_only = True))
-        else:
-            print("You are not authorised to delete this comment\nUser ID: %d\nAuthor ID: %d" % (self.user.key.id(), post.author_key))
         return
 
 
 # Everything for comments below
 
+# Handler for posting comments
 class CommentHandler(GeneralHandler):
     def post(self):
-        if self.user:
+        if not self.user:
+            self.render('error.html', error = "Commenting is for registered users only")
+        else:
             comment = self.request.get('comment')
             parent = Post.get_by_id(int(self.request.get('parent')))
             posts = self.get_entries(100)
@@ -142,7 +147,7 @@ class CommentHandler(GeneralHandler):
             author_id = self.user.key.id()
             author_name = self.user.name_by_user
             if not comment:
-                return
+                return # do nothing if user submitted empty comment
             else:
                 c = Comment(content = comment,
                             author_id = author_id,
@@ -150,11 +155,11 @@ class CommentHandler(GeneralHandler):
                             parent = parent.key)
                 c.put()
                 comment = self.render_single_comment(c)
+                # return JSON to Ajax
                 self.write(json.dumps(({'comment': comment})))
-        else:
-            self.redirect('/error', error = "Commenting is for registered users only")
 
-# edit comment in place
+
+# handler to edit comment in place
 class EditCommentHandler(GeneralHandler):
     def post(self):
         data = self.request.get('commentid').split(';')
@@ -170,6 +175,7 @@ class EditCommentHandler(GeneralHandler):
         else:
             self.write(json.dumps(({'comment': "There was no comment"})))
 
+    # helper function to render line breaks in comments
     def render_commenttext(self, comment):
         comment = comment.replace('\n', '<br>')
         return comment

@@ -1,9 +1,11 @@
-
 import json
 from handler import GeneralHandler, Post, User
 
+# Handler for likes on posts
 class LikeHandler(GeneralHandler):
     def post(self):
+        # this can only be reached if user is logged in, but just in case,
+        #  we check for user:
         if self.user:
             # get post id from Ajax script
             postID = int(self.request.get('postID'))
@@ -30,7 +32,7 @@ class LikeHandler(GeneralHandler):
                 post.put()
                 self.user.put()
         else:
-            error = "You have to be logged in to post, comment or like"
+            # just a fallback, it should never be displayed to a visitor, since
+            # only logged in users get to see the link with the post method
+            error = "Only logged in users can like posts"
             self.write(json.dumps(({'error': error})))
-            self.redirect('/login')
-            print "Redirected"

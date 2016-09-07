@@ -1,7 +1,7 @@
 import re
 from handler import GeneralHandler, make_secure_val, check_secure_val, User
 
-# helper functions for signup
+# helper functions to verify user input
 USER_RE = re.compile(r"^[a-zA-Z0-9_-]{3,20}$")
 def validate_user(username):
     return USER_RE.match(username)
@@ -18,8 +18,9 @@ def validate_email(email):
     return EMAIL_RE.match(email) or True
 
 
-# Handler for the whole shebang
+# Handler for the signup page
 class SignupHandler(GeneralHandler):
+    # render signup form
     def get(self):
         self.render("signup.html")
 
@@ -49,9 +50,11 @@ class SignupHandler(GeneralHandler):
             self.error4 = "This is not a valid e-mail address"
 
 
-        # select what to show next
+        # if all input is valid, coninue with done in RegisterHandler
         if valid_username and valid_password and valid_verify and valid_email:
             self.done()
+        # if there is an error, render signup form with user input and error
+        # messages
         else:
             self.render("signup.html", username = self.username,
                                        password = self.password,
@@ -61,12 +64,16 @@ class SignupHandler(GeneralHandler):
                                        error2 = self.error2,
                                        error3 = self.error3,
                                        error4 = self.error4)
+
+    # here just so things don't break
     def done(self, *a, **kw):
         raise NotImplementedError
 
+# this handles the actual registration
 class RegisterHandler(SignupHandler):
     def done(self):
-        u = User.by_name(self.username.lower())
+        # check if username is already registered
+        u = User.by_name(self.username.lower()) # case doesn't matter
         if u:
             self.error1 = "This username already exists"
             self.render("signup.html", error1 = self.error1)
@@ -76,6 +83,8 @@ class RegisterHandler(SignupHandler):
             self.login(u)
             self.redirect('/welcome')
 
+# render welcome page if user signed up successfully,
+# otherwise redirect to signup
 class WelcomeHandler(GeneralHandler):
     def get(self):
         user = self.user

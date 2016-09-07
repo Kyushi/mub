@@ -1,3 +1,4 @@
+<!-- login page -->
 {% extends "base.html" %}
 
 {% block title %}Login{% endblock %}
@@ -25,6 +26,7 @@
           <input type="password" name="password" value="">
         </td>
       </tr>
+      <!-- render row for erros only if there was an issue with the user data-->
       {% if error %}
         <tr>
           <td colspan="2">
@@ -40,15 +42,10 @@
     </table>
     <div class="cannot-login">
       <p>No login data? <a href="/signup">Sign up here</a></p>
+      <!-- one day we'll provide a reset password link here -->
       <p>Forgot your password? We'll build something for that case soon.</p>
     </div>
   </form>
 </section>
-
-<div class="debug">
-  {{var1}}<br>
-  {{var2}}<br>
-  {{var3}}<br>
-</div>
 
 {% endblock %}

@@ -15,7 +15,7 @@ template_dir = os.path.join(os.path.dirname(__file__), 'templates')
 jinja_env = jinja2.Environment(loader = jinja2.FileSystemLoader(template_dir),
                                autoescape = True)
 
-
+# TODO: add write to datastore function for post and comment classes
 # Model for blog Post
 class Post(ndb.Model):
     subject = ndb.StringProperty(required = True)
@@ -27,10 +27,13 @@ class Post(ndb.Model):
     likes = ndb.IntegerProperty()
     liked_by = ndb.IntegerProperty(repeated = True)
 
+    # helper function to render blog text with line breaks
     def render(self):
         self._render_text = self.content.replace('\n', '\n<br>')
         return self._render_text
 
+    # helper function to display fetch all comments for their respective post
+    # from the datastore
     def comments(self):
         self.comments = Comment.query(ancestor=self.key).order(-Comment.created).fetch()
         return self.comments
@@ -77,6 +80,11 @@ class User(ndb.Model):
         if u and valid_hash(name.lower(), pw, u.pw_hash):
             return u
 
+# make users key (for possible later use to have user groups, such as admin, mod
+# etc.)
+def users_key(group = 'default'):
+    return ndb.Key('users', group)
+
 # functions for hashing and checking hashed user login info
 def make_salt():
     salt = ''.join(random.choice(string.letters) for x in xrange(7))
@@ -97,16 +105,14 @@ def valid_hash(name, pw, h):
 def make_secure_val(val):
     return "%s|%s" %(val, hmac.new(secret, val).hexdigest())
 
+# check uid/hash pair for validity
 def check_secure_val(secure_val):
     val = secure_val.split('|')[0]
     if secure_val == make_secure_val(val):
         return val
 
-# make users key
-def users_key(group = 'default'):
-    return ndb.Key('users', group)
-
-
+# Handler that gets imported into more or less all other handlers that allows
+# makes certain actions easier
 class GeneralHandler(webapp2.RequestHandler):
     def write(self, *a, **kw):
         self.response.out.write(*a, **kw)
@@ -118,19 +124,22 @@ class GeneralHandler(webapp2.RequestHandler):
     def render(self, template, **kw):
         self.write(self.render_str(template, **kw))
 
+    # get blog posts
     def get_entries(self, n=10):
         e = Post.query()
         e = e.order(-Post.created)
         entr = e.fetch(n)
         return entr
 
+    # get comments
     def get_comments(self, n=10):
         c = Comment.query()
         c = c.order(-Comment.created)
         comments = c.fetch()
         return comments
 
-    # TODO: render with edit and delete links
+    # renders a single comment including all html, so that it can be inserted
+    # via ajax
     def render_single_comment(self, comment):
         html = '''
                 <div class="comment-edit-form">
@@ -144,27 +153,29 @@ class GeneralHandler(webapp2.RequestHandler):
                 <div class="single-comment single">
                     <p class="grey small">%s said:</p>
                     <p class="comment-content">%s</p>
-                        <a href="#" class="edit">Edit</a> |
-                        <a href="#" data-ids="%d;%d" class="delete">Delete</a>
-                    </div>
-                    ''' % (comment.content, comment.key.id(),comment.key.parent().id(), comment.author_name, comment.content, comment.key.id(), comment.key.parent().id())
+                    <a href="#" class="edit">Edit</a> |
+                    <a href="#" data-ids="%d;%d" class="delete">Delete</a>
+                </div>
+                ''' % (comment.content, \
+                       comment.key.id(), \
+                       comment.key.parent().id(), \
+                       comment.author_name, \
+                       comment.content, \
+                       comment.key.id(), \
+                       comment.key.parent().id())
         return html
 
+    # get referrer or set referrer to index for use in cancel
     def get_referrer(self):
         return self.request.referer or "/"
 
-    def render_blog(self, page, **kw):
-        e = Post.query()
-        e = e.order(-Post.created)
-        posts = e.fetch(10)
-        for post in posts:
-            print("Entry: %s" % str(post))
-        self.render(page, posts = posts, **kw)
-
+    # set the cookie with user id and hash
     def set_secure_cookie(self, name, val):
         cookie_val = make_secure_val(val.lower())
-        self.response.headers.add_header('Set-Cookie', '%s=%s; Path="/"' % (name.lower(), cookie_val))
+        self.response.headers.add_header('Set-Cookie', '%s=%s; Path="/"'\
+                                         % (name.lower(), cookie_val))
 
+    # read the cookie and make sure the uid/hash pair is valid
     def read_secure_cookie(self, name):
         cookie_val = self.request.cookies.get(name)
         return cookie_val and check_secure_val(cookie_val)
@@ -175,6 +186,7 @@ class GeneralHandler(webapp2.RequestHandler):
     def logout(self):
         self.response.headers.add_header('Set-Cookie', 'user_id=; Path="/"')
 
+    # check if user is logged in and set global user if yes
     def initialize(self, *a, **kw):
         webapp2.RequestHandler.initialize(self, *a, **kw)
         uid = self.read_secure_cookie('user_id')

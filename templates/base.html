@@ -1,3 +1,6 @@
+<!-- TODO: make mobile first! -->
+<!-- base file that provides the framework for all pages that are displayed
+to the user -->
 <!DOCTYPE html>
 <html>
   <head>
@@ -7,28 +10,24 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta id="theme-color" name="theme-color" content="#cddac7">
     <title>{% block title %}{% endblock %}</title>
-
     <link href='https://fonts.googleapis.com/css?family=Lora|Cormorant:300italic,400' rel='stylesheet' type='text/css'>
     <!-- <link rel="stylesheet" href="./css/bootstrap.min.css"> -->
     <link rel="stylesheet" href="/css/style.css">
-
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
-
   </head>
   <body>
     <div class="content">
-
       <div class="col-12">
         <!-- header below -->
         <header class="col-9 logo">
           <h1><a href="/" class="logo">tell me all about it</a></h1>
         </header>
-
         <!-- this is the menu -->
         {% block menu %}
         <nav class="main-menu">
           <div class="col-12 menu">
             <a href="/" class="menu-item">Home</a>
+            <!-- show menu items depending on existing user or visitor -->
             {% if user %}
               <a href="/newpost" class="menu-item">Write a new post</a>
               <p class="menu-item">Logged in as: {{user.name_by_user}}</p>

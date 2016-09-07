@@ -1,7 +1,7 @@
 {% extends "base.html" %}
-
+<!-- Update title to current page -->
 {% block title %}Read the blog{% endblock %}
-
+<!-- content that gets inserted into content block on base page -->
 {% block content %}
 <!-- if we're on the newpost page, the blog post form gets rendered in here -->
 {% block newpost %}
@@ -9,39 +9,53 @@
 <!-- display blog posts -->
 <section class="blog-posts">
   <h2 class="section-header">Read about it:</h2>
+  <!-- show all existing blog posts -->
   {% for post in posts %}
   <article class="blog-article single">
-    <div class="post-title col-9"><h3>{{post.subject}}</h3></div>
-    <div class="date col-3">{{post.created.strftime("%d %B %Y, %H:%M")}}, by {{post.author}}</div>
-    <div class="post-text col-12"><p class="post">{{post.render() |safe }}</p></div>
-    <div class="padded small col-1"><a href="/{{post.key.id()}}">Permalink</a></div>
-    <div class="grey small padded col-1">
+    <div class="post-title col-9">
+      <h3>{{post.subject}}</h3>
+    </div>
+    <div class="date col-3">
+      {{post.created.strftime("%d %B %Y, %H:%M")}}, by {{post.author}}
+    </div>
+    <div class="post-text col-12">
+      <p class="post">{{post.render() |safe }}</p>
+    </div>
+    <div class="padded small col-1">
+      <a href="/{{post.key.id()}}">Permalink</a>
+    </div>
+    <div class="edit-delete grey small padded col-1">
     <!-- Show edit link only for own blog posts -->
       {% if user %}
         {% if user.key.id() == post.author_key %}
-          <a href="/editpost/{{post.key.id()}}">Edit</a> | <a href="#" data-ids="{{post.key.id()}}" class="delete">Delete</a>
+          <a href="/editpost/{{post.key.id()}}">Edit</a> |
+          <a href="#" data-ids="{{post.key.id()}}" class="delete">Delete</a>
         {% endif %}
       {% endif %}
     </div>
     <div class="col-1 small padded">
-      <!-- like arrow and number is only shown if the post has not been deleted -->
-      {% if user and post.likes >= 0 %}
+      <!-- show different links, depending on user or visitor (not logged in)-->
+      {% if user %}
       <p>
-        <a href="#" class="like" data-key="{{post.key.id()}}">↑ <span>{{post.likes}}</span> Likes</a>
+        <a href="#" class="like" data-key="{{post.key.id()}}">
+          ↑ <span>{{post.likes}}</span> Likes
+        </a>
       </p>
-      {% elif not user and post.likes >= 0 %}
+      {% else %}
       <p>
-        <a href="/login" class="nouser-like">↑ <span>{{post.likes}}</span> Likes</a>
+        <a href="/login" class="no-user-like">↑ <span>{{post.likes}}</span> Likes</a>
       </p>
       {% endif %}
     </div>
     <div class="col-1 grey small padded">
+      <!-- show that user likes this if they do -->
       {% if user %}
         {% if user.key.id() in post.liked_by %}
           <p class="you-like">You like this</p>
         {% endif %}
       {% endif %}
     </div>
+    <!-- div for error messages -->
     <div class="col-4 padded small">
       <p class="error">{{error}}<p>
     </div>
@@ -57,6 +71,7 @@
       <p class="error">{{error}}</p>
       <!-- show comment text input if user is logged in -->
     {% if user %}
+      <!-- when user clicks on placeholder text, comment form is shown -->
       <div class="comment-placeholder col-2">
         <p>Say something about it</p>
       </div>
@@ -74,8 +89,10 @@
         </div>
       {%endif %}
     {% endif %}
+      <!-- show all comments for this post -->
       <div class="comment-list">
         {% for comment in post.comments() %}
+          <!-- hidden comment edit form gets displayed when user clicks edit -->
           <div class="comment-edit-form">
             <form method="post" class="edit-form">
               <textarea name="edit-comment" class="comment-input">{{comment.content}}</textarea>
@@ -85,6 +102,7 @@
             <p class="error"><p>
           </div>
 
+          <!-- div for each comment -->
           <div class="single-comment single">
             <p class="grey small">{{comment.author_name}} said:</p>
             <p class="comment-content">

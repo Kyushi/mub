@@ -3,9 +3,14 @@ import webapp2
 from handler import GeneralHandler
 from login import LoginHandler
 from logout import LogoutHandler
-from signup import RegisterHandler, WelcomeHandler
-import blogfunctions
-from blogfunctions import NewPostHandler, PermalinkHandler, EditPostHandler, CommentHandler, EditCommentHandler, DeleteHandler
+from signup import RegisterHandler, \
+                   WelcomeHandler
+from blogfunctions import NewPostHandler, \
+                          PermalinkHandler, \
+                          EditPostHandler, \
+                          CommentHandler, \
+                          EditCommentHandler, \
+                          DeleteHandler
 from likes import LikeHandler
 
 
@@ -21,18 +26,18 @@ class MainPage(GeneralHandler):
             self.render('blog.html', posts = posts)
 
 
-# make things work
+# route handlers
 app = webapp2.WSGIApplication([
     ('/', MainPage),
-    ('/newpost', blogfunctions.NewPostHandler),
-    ('/(\d+)', blogfunctions.PermalinkHandler),
-    ('/editpost/(\d+)', blogfunctions.EditPostHandler),
+    ('/newpost', NewPostHandler),
+    ('/(\d+)', PermalinkHandler),
+    ('/editpost/(\d+)', EditPostHandler),
     ('/signup', RegisterHandler),
     ('/welcome', WelcomeHandler),
     ('/login', LoginHandler),
     ('/logout', LogoutHandler),
     ('/like', LikeHandler),
-    ('/comment', blogfunctions.CommentHandler),
-    ('/editcomment', blogfunctions.EditCommentHandler),
-    ('/delete', blogfunctions.DeleteHandler)
+    ('/comment', CommentHandler),
+    ('/editcomment', EditCommentHandler),
+    ('/delete', DeleteHandler)
     ], debug=True)

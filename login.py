@@ -1,12 +1,8 @@
-from handler import GeneralHandler, make_hash, valid_hash
+from handler import GeneralHandler
 from signup import User
-from google.appengine.ext import ndb
 
-# make hash with username entered by user and salt from db
-def check_hash(pw_hash, pw):
-    salt = pw_hash.split('|')[0]
-    return make_hash(pw, salt) == pw_hash
-
+# Handler for login page, renders login form, checks input, sets cookie,
+# redirects to welcome if user info is correct, otherwise displays error message
 class LoginHandler(GeneralHandler):
     def get(self):
         self.render('login.html')
