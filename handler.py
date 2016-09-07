@@ -133,18 +133,21 @@ class GeneralHandler(webapp2.RequestHandler):
     # TODO: render with edit and delete links
     def render_single_comment(self, comment):
         html = '''
-                <div class="single-comment">
+                <div class="comment-edit-form">
+                    <form method="post" class="edit-form">
+                        <textarea name="edit-comment" class="comment-input">%s</textarea>
+                        <a href="#" data-commentid="%s;%s" class="save-button">Save</a> |
+                        <a href="#" class="cancel-button">Cancel</a>
+                    </form>
+                  <p class="error"><p>
+                </div>
+                <div class="single-comment single">
                     <p class="grey small">%s said:</p>
-                    <p>%s</p>
-        ''' % (comment.author_name, comment.content)
-        if comment.author_name != "System":
-            html += '''
+                    <p class="comment-content">%s</p>
                         <a href="#" class="edit">Edit</a> |
                         <a href="#" data-ids="%d;%d" class="delete">Delete</a>
                     </div>
-                    ''' % (comment.key.id(), comment.key.parent().id())
-        else:
-            html += "\n</div>"
+                    ''' % (comment.content, comment.key.id(),comment.key.parent().id(), comment.author_name, comment.content, comment.key.id(), comment.key.parent().id())
         return html
 
     def get_referrer(self):

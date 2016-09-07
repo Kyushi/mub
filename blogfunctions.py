@@ -161,7 +161,6 @@ class EditCommentHandler(GeneralHandler):
         commentid = int(data[0])
         parentid = int(data[1])
         newcomment = self.request.get('newcomment')
-        print("Comment text: ", newcomment)
         parent_key = Post.get_by_id(parentid).key
         comment = Comment.get_by_id(commentid, parent_key)
         if comment:

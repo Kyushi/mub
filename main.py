@@ -4,6 +4,7 @@ from handler import GeneralHandler
 from login import LoginHandler
 from logout import LogoutHandler
 from signup import RegisterHandler, WelcomeHandler
+import blogfunctions
 from blogfunctions import NewPostHandler, PermalinkHandler, EditPostHandler, CommentHandler, EditCommentHandler, DeleteHandler
 from likes import LikeHandler
 
@@ -23,15 +24,15 @@ class MainPage(GeneralHandler):
 # make things work
 app = webapp2.WSGIApplication([
     ('/', MainPage),
-    ('/newpost', NewPostHandler),
-    ('/(\d+)', PermalinkHandler),
-    ('/editpost/(\d+)', EditPostHandler),
+    ('/newpost', blogfunctions.NewPostHandler),
+    ('/(\d+)', blogfunctions.PermalinkHandler),
+    ('/editpost/(\d+)', blogfunctions.EditPostHandler),
     ('/signup', RegisterHandler),
     ('/welcome', WelcomeHandler),
     ('/login', LoginHandler),
     ('/logout', LogoutHandler),
     ('/like', LikeHandler),
-    ('/comment', CommentHandler),
-    ('/editcomment', EditCommentHandler),
-    ('/delete', DeleteHandler)
+    ('/comment', blogfunctions.CommentHandler),
+    ('/editcomment', blogfunctions.EditCommentHandler),
+    ('/delete', blogfunctions.DeleteHandler)
     ], debug=True)

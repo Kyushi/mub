@@ -126,6 +126,11 @@ header {
   font-weight: 300;
 }
 
+.logo, .logo:hover {
+  text-decoration: none;
+  color: #333;
+}
+
 /* menu styles */
 nav {
   width: 100%;
