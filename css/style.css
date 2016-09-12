@@ -253,7 +253,7 @@ button {
   width: 100%;
 }
 
-.submit-button {
+/*.submit-button {
   display: block;
   margin: 0.33em;
   padding: 0.33em;
@@ -267,7 +267,7 @@ button {
 .submit-button:hover {
   text-decoration: none;
   color: #fff;
-}
+}*/
 
 .single-comment {
   border-bottom: 1px solid #cdc7da;

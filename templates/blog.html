@@ -78,7 +78,8 @@
       <form method="post" class="comment-input-form">
         <label>
           <textarea name="comment" class="comment-input" placeholder="Give us a piece of your mind"></textarea>
-          <a href="#" data-parentid="{{post.key.id()}}" class="submit-button col-1">Say it</a>
+          <a href="#" data-parentid="{{post.key.id()}}" class="submit-button col-1">Say it</a> | 
+          <a href="#" class="cancel-comment col-1">Cancel</a>
         </label>
       </form>
       {% if error %}

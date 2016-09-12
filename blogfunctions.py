@@ -132,7 +132,7 @@ class DeleteHandler(GeneralHandler):
         return
 
 
-# Everything for comments below
+# Everything for comments below except delete, which is above
 
 # Handler for posting comments
 class CommentHandler(GeneralHandler):
@@ -141,12 +141,14 @@ class CommentHandler(GeneralHandler):
             self.render('error.html', error = "Commenting is for registered users only")
         else:
             comment = self.request.get('comment')
+            print("Comment: %s" % comment)
             parent = Post.get_by_id(int(self.request.get('parent')))
             posts = self.get_entries(100)
             comments = self.get_comments(100)
             author_id = self.user.key.id()
             author_name = self.user.name_by_user
             if not comment:
+                print("There was no comment")
                 return # do nothing if user submitted empty comment
             else:
                 c = Comment(content = comment,
