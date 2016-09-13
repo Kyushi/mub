@@ -16,7 +16,7 @@ class NewPostHandler(GeneralHandler):
         if not user:
             self.redirect('/login')
         else:
-            posts = self.get_entries(5)
+            posts = self.get_entries(100)
             referrer = self.get_referrer() # referrer that allows to return to
             self.render('newpost.html',    #  the previous page on cancel
                         posts=posts,
@@ -32,12 +32,7 @@ class NewPostHandler(GeneralHandler):
 
         # check if title and post are present, else show error message
         if subject and content:
-            post = Post(subject=subject,
-                        content=content,
-                        author=author,
-                        author_key=self.user.key.id(),
-                        likes=0
-                        )
+            post = Post.write_entity(subject,content,author,self.user.key.id())
             post.put() # shove the thing into the datastore and
             post_id = post.key.id() # get its id and
             self.redirect('/%d' % post_id) # show a single blog post
@@ -148,10 +143,10 @@ class CommentHandler(GeneralHandler):
             if not comment:
                 return # do nothing if user submitted empty comment
             else:
-                c = Comment(content=comment,
-                            author_id=author_id,
-                            author_name=author_name,
-                            parent=parent.key)
+                c = Comment.write_entity(comment,
+                                         author_id,
+                                         author_name,
+                                         parent.key)
                 c.put()
                 comment = self.render_single_comment(c)
                 # return JSON to Ajax

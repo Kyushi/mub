@@ -18,8 +18,6 @@ template_dir = os.path.join(os.path.dirname(__file__), 'templates')
 jinja_env = jinja2.Environment(loader=jinja2.FileSystemLoader(template_dir),
                                autoescape=True)
 
-# TODO: add write to datastore function for post and comment classes
-
 class Post(ndb.Model):
     """Model for blog Post"""
     subject = ndb.StringProperty(required=True)
@@ -42,6 +40,15 @@ class Post(ndb.Model):
         self.comments = Comment.query(ancestor=self.key).order(-Comment.created).fetch()
         return self.comments
 
+    @classmethod
+    def write_entity(cls, subject, content, author, author_key):
+        """Class method to write a post entity to the datastore"""
+        return cls(subject=subject,
+                   content=content,
+                   author=author,
+                   author_key=author_key,
+                   likes=0)
+
 
 class Comment(ndb.Model):
     """Model for comments"""
@@ -52,6 +59,14 @@ class Comment(ndb.Model):
     last_modified = ndb.DateTimeProperty()
     likes = ndb.IntegerProperty()
     liked_by = ndb.IntegerProperty(repeated=True)
+
+
+    @classmethod
+    def write_entity(cls,content,author_id,author_name,parent_key):
+        return cls(content=content,
+                   author_id=author_id,
+                   author_name=author_name,
+                   parent=parent_key)
 
 
 class User(ndb.Model):

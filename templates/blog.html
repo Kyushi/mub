@@ -32,14 +32,16 @@
     <div class="post-details row">
       <!-- show different links for likes, depending on user or
       visitor (not logged in)-->
-      <div class="col-xs-6 small">
+      <div class="col-xs-12 small">
         {% if user %}
         <p>
           <a href="#" class="like" data-key="{{post.key.id()}}">
             ↑ <span>{{post.likes}}</span> Likes
           </a>
+          <!-- div for error messages -->
+          <span class="error"> {{error}}<span>
           {% if user.key.id() in post.liked_by %}
-            <span class="you-like grey small">You like this</span>
+            <span class="you-like grey small"> You like this</span>
           {% endif %}
         </p>
         {% else %}
@@ -65,11 +67,6 @@
         {% if post.last_modified %}
           Edited {{post.last_modified.strftime("%d.%m.'%y, %H:%M")}}
         {% endif %}
-      </div>
-
-      <!-- div for error messages -->
-      <div class="error small col-xs-6">
-        <p>{{error}}<p>
       </div>
 
       <!-- Permalink -->

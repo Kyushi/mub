@@ -32,7 +32,7 @@ class LikeHandler(GeneralHandler):
                 post.likes += 1
                 post.liked_by.append(uid)
                 self.user.likes.append(post.key.id())
-                self.write(json.dumps(({'likes': post.likes, 'you-like': 'You like this'})))
+                self.write(json.dumps(({'likes': post.likes, 'you-like': ' You like this'})))
                 post.put()
                 self.user.put()
         else:
