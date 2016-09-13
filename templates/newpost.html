@@ -4,25 +4,26 @@
 {% block title %}Write a post{% endblock %}
 
 {% block newpost %}
-<section class="submission-form">
+<section class="submission-form col-xs-12">
   <h2 class="section-header">Tell us something</h2>
   <form method="post">
     <label>
-      <div class="input-title">Title: </div>
-      <input type="text" name="subject" value="{{subject}}" class="title-input">
+      <div class="post-title"><h2>Title: </h2></div>
+      <input type="text" name="subject" value="{{subject}}" class="form-input title-input">
     </label>
     <br>
     <br>
     <label>
-      <div class="input-title">Type your thoughts here: </div>
-      <textarea name="content" class="post-input">{{content}}</textarea>
+      <div class="post-title"><h3>Type your thoughts here: </h3></div>
+      <textarea name="content" class="form-input post-input">{{content}}</textarea>
     </label>
     <br>
     {% if error %}
-      <div class="error" style="color: red;">{{error}}</div>
+      <div class="error">{{error}}</div>
       <br>
     {% endif %}
-    <button>let everybody know</button>
+    <input type="submit" value="Show me my stuff" class="submit-newpost">
+    <!-- <button>let everybody know</button> -->
     <a href="{{referrer}}" class="small">cancel</a>
 
   </form>

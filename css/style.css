@@ -89,7 +89,27 @@ nav {
 .border-top {
   border-top: 1px solid #dac7cd; }
 
+.single-comment:first-child {
+  border: None; }
+
+.border-bottom {
+  border-bottom: 1px solid #dac7cd; }
+
 /* input styles */
+.submit-login,
+.submit-newpost {
+  background: #cddac7;
+  color: #eee;
+  font-size: 12px;
+  padding: 0.33em;
+  margin-top: 0.33em;
+  border: None; }
+
+.submit-login:hover,
+.submit-newpost:hover {
+  color: #fff;
+  background: #dac7cd; }
+
 .post-input,
 .title-input {
   width: 400px; }
@@ -99,8 +119,7 @@ nav {
 
 .post-title {
   font-family: 'Cormorant', serif;
-  font-weight: 400;
-  padding-bottom: 0; }
+  font-weight: 400; }
 
 .post-text {
   margin: 0.67em 0; }
@@ -119,20 +138,13 @@ nav {
 .comment-input-form {
   display: none; }
 
-.comment-input {
+.comment-input,
+.form-input {
   margin-top: 0.33em;
   padding: 0.33em;
   border: 1px solid #cddac7; }
 
 .comment-edit-form {
   display: none; }
-
-/*footer styles */
-/* zocial */
-[class*="zocial-"]:before {
-  font-family: 'zocial', sans-serif; }
-
-[class*="zocial-"]:hover {
-  text-decoration: none; }
 
 /*# sourceMappingURL=style.css.map */

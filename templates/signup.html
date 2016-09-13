@@ -4,7 +4,7 @@
 {% block title %}Signup{% endblock %}
 
 {% block content %}
-<section class="signup-form">
+<section class="signup-form col-xs-12">
   <h2 class="section-header">Please fill in the required fields below:</h2>
   <form method="post">
     <table>
@@ -13,7 +13,7 @@
           <p>Please enter a username: </p>
         </td>
         <td>
-          <input type="text" name="username" value="{{username}}">
+          <input type="text" name="username" value="{{username}}" class="form-input">
         </td>
         <td>
           <p class="error">{{error1}}</p>
@@ -24,7 +24,7 @@
           <p>Please enter a safe password: </p>
         </td>
         <td>
-          <input type="password" name="password" value={{password}}>
+          <input type="password" name="password" value="{{password}}" class="form-input">
         </td>
         <td>
           <p class="error">{{error2}}</p>
@@ -35,7 +35,7 @@
           <p>Please verify your password: </p>
         </td>
         <td>
-          <input type="password" name="verify" value={{verify}}>
+            <input type="password" name="verify" value="{{verify}}" class="form-input">
         </td>
         <td>
           <p class="error">{{error3}}</p>
@@ -46,7 +46,7 @@
           <p>Please enter en e-mail address (optional): </p>
         </td>
         <td>
-          <input type="text" name="email" value="{{email}}">
+          <input type="text" name="email" value="{{email}}" class="form-input">
         </td>
         <td>
           <p class="error">{{error4}}</p>

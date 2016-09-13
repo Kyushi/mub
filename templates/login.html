@@ -6,7 +6,7 @@
 {% block menu %}{{ super() }}{% endblock %}
 
 {% block content %}
-<section class="login-form">
+<section class="login-form col-xs-12">
   <h2 class="section-header">Please fill in the required fields below:</h2>
   <form method="post">
     <table>
@@ -15,7 +15,7 @@
           <p>Username: </p>
         </td>
         <td>
-          <input type="text" name="username" value="{{username}}">
+          <input type="text" name="username" value="{{username}}" class="form-input">
         </td>
       </tr>
       <tr>
@@ -23,7 +23,7 @@
           <p>Password: </p>
         </td>
         <td>
-          <input type="password" name="password" value="">
+          <input type="password" name="password" value="" class="form-input">
         </td>
       </tr>
       <!-- render row for erros only if there was an issue with the user data-->
@@ -35,17 +35,20 @@
         </tr>
       {% endif %}
       <tr>
-        <td colspan="2">
-          <input type="submit" value="Show me my stuff">
+        <td>
+          
+        </td>
+        <td>
+          <input type="submit" value="Show me my stuff" class="submit-login">
         </td>
       </tr>
     </table>
-    <div class="cannot-login">
-      <p>No login data? <a href="/signup">Sign up here</a></p>
-      <!-- one day we'll provide a reset password link here -->
-      <p>Forgot your password? We'll build something for that case soon.</p>
-    </div>
   </form>
+  <div class="cannot-login">
+    <p>No login data? <a href="/signup">Sign up here</a></p>
+    <!-- one day we'll provide a reset password link here -->
+    <p>Forgot your password? We'll build something for that case soon.</p>
+  </div>
 </section>
 
 {% endblock %}
