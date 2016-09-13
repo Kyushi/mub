@@ -6,25 +6,26 @@
 {% block newpost %}
 <section class="submission-form col-xs-12">
   <h2 class="section-header">Tell us something</h2>
-  <form method="post">
-    <label>
+  <form method="post" class="row">
+    <label class="col-xs-12">
       <div class="post-title"><h2>Title: </h2></div>
-      <input type="text" name="subject" value="{{subject}}" class="form-input title-input">
+      <input type="text" name="subject" value="{{subject}}" class="form-input title-input col-xs-12">
     </label>
     <br>
     <br>
-    <label>
+    <label class="col-xs-12">
       <div class="post-title"><h3>Type your thoughts here: </h3></div>
-      <textarea name="content" class="form-input post-input">{{content}}</textarea>
+      <textarea name="content" class="form-input post-input col-xs-12">{{content}}</textarea>
     </label>
     <br>
     {% if error %}
-      <div class="error">{{error}}</div>
+      <div class="error col-xs-12">{{error}}</div>
       <br>
     {% endif %}
-    <input type="submit" value="Show me my stuff" class="submit-post">
-    <!-- <button>let everybody know</button> -->
-    <a href="{{referrer}}" class="small">cancel</a>
+    <div class="submit-bar col-xs-12">
+      <input type="submit" value="Let me in" class="submit-post">
+      <a href="{{referrer}}" class="small">cancel</a>
+    </div>
 
   </form>
 </section>

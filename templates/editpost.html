@@ -7,25 +7,26 @@
 
 <section class="submission-form col-xs-12">
   <h2 class="section-header">Edit your post</h2>
-  <form method="post">
-    <label>
+  <form method="post" class="row">
+    <label class="col-xs-12">
       <div class="post-title"><h2>Title: </h2></div>
-      <input type="text" name="subject" value="{{post.subject}}" class="title-input form-input">
+      <input type="text" name="subject" value="{{post.subject}}" class="title-input form-input col-xs-12">
     </label>
     <br>
     <br>
-    <label>
+    <label class="col-xs-12">
       <div class="post-title"><h3>Change your story here: </h3></div>
-      <textarea name="content" class="post-input form-input">{{post.content}}</textarea>
+      <textarea name="content" class="post-input form-input col-xs-12">{{post.content}}</textarea>
     </label>
     <br>
     {% if error %}
-      <div class="error" style="color: red;">{{error}}</div>
+      <div class="error col-xs-12" style="color: red;">{{error}}</div>
       <br>
     {% endif %}
-    <input type="submit" value="Rewrite your story" class="submit-post">
-     <a href="{{referrer}}" class="small">cancel</a>
-
+    <div class="submit-bar col-xs-12">
+      <input type="submit" value="Rewrite your story" class="submit-post">
+      <a href="{{referrer}}" class="small">cancel</a>
+    </div>
   </form>
 </section>
 

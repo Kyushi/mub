@@ -32,7 +32,7 @@
     <div class="post-details row">
       <!-- show different links for likes, depending on user or
       visitor (not logged in)-->
-      <div class="col-xs-4 small">
+      <div class="col-xs-6 small">
         {% if user %}
         <p>
           <a href="#" class="like" data-key="{{post.key.id()}}">
@@ -51,7 +51,7 @@
       </div>
 
       <!-- Show edit and delete link only for own blog posts -->
-      <div class="edit-delete grey small col-xs-4">
+      <div class="edit-delete grey small col-xs-6">
         {% if user %}
           {% if user.key.id() == post.author_key %}
             <a href="/editpost/{{post.key.id()}}">Edit</a> |

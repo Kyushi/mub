@@ -5,12 +5,12 @@
 
 {% block content %}
 <section class="signup-form col-xs-12">
-  <h2 class="section-header">Please fill in the required fields below:</h2>
   <form method="post">
+    <h2 class="section-header">Please fill in the required fields below:</h2>
     <table>
       <tr>
         <td>
-          <p>Please enter a username: </p>
+          <p>Username: </p>
         </td>
         <td>
           <input type="text" name="username" value="{{username}}" class="form-input">
@@ -21,7 +21,7 @@
       </tr>
       <tr>
         <td>
-          <p>Please enter a safe password: </p>
+          <p>Password: </p>
         </td>
         <td>
           <input type="password" name="password" value="{{password}}" class="form-input">
@@ -32,7 +32,7 @@
       </tr>
       <tr>
         <td>
-          <p>Please verify your password: </p>
+          <p>Repeat password: </p>
         </td>
         <td>
             <input type="password" name="verify" value="{{verify}}" class="form-input">
@@ -43,7 +43,7 @@
       </tr>
       <tr>
         <td>
-          <p>Please enter en e-mail address (optional): </p>
+          <p>E-mail address (optional): </p>
         </td>
         <td>
           <input type="text" name="email" value="{{email}}" class="form-input">
@@ -53,13 +53,17 @@
         </td>
       </tr>
       <tr>
-        <td colspan="3">
-          <input type="submit" value="Please let me in">
+        <td>
+        </td>
+        <td>
+          <input type="submit" value="Please let me in" class="submit-login">
+        </td>
+        <td>
         </td>
       </tr>
     </table>
   </form>
-  <div class="to-login col-xs-12">
+  <div class="to-login">
     <p>Already signed up? <a href="/login">Login here</a></p>
   </div>
 </section>

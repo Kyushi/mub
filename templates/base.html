@@ -21,19 +21,20 @@ to the user -->
         <!-- header below -->
         <header class="col-xs-12 logo">
           <h1><a href="/" class="logo">tell me all about it</a></h1>
+          <h5 class="subtitle">Tell us a story{% if user %},
+            {{user.name_by_user}}{% endif %}!</h5>
         </header>
         <!-- this is the menu -->
         {% block menu %}
         <nav class="main-menu col-xs-12">
-          <a href="/" class="menu-item">Home</a>
+          <a href="/" class="menu-item col-xs-2">Home</a>
           <!-- show menu items depending on existing user or visitor -->
           {% if user %}
-            <a href="/newpost" class="menu-item">Write a new post</a>
-            <p class="menu-item">Logged in as: {{user.name_by_user}}</p>
-            <a href="/logout" class="menu-item">Logout</a>
+            <a href="/newpost" class="menu-item col-xs-10">Write a new post</a>
+            <br><a href="/logout" class="small menu-item">Logout</a>
           {% else %}
-            <a href="/login" class="menu-item">Login</a>
-            <a href="/signup" class="menu-item">Sign Up</a>
+            <a href="/login" class="menu-item col-xs-2">Login</a>
+            <a href="/signup" class="menu-item col-xs-2">Sign Up</a>
           {% endif %}
         </nav>
         {% endblock menu %}
