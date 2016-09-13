@@ -1,17 +1,21 @@
+"""This module contains only the 'like' class"""
+
 import json
-from handler import GeneralHandler, Post, User
+from handler import GeneralHandler, Post
 
 # Handler for likes on posts
 class LikeHandler(GeneralHandler):
+    """Likes for posts are handled here"""
     def post(self):
+        """Likes are updated dynamically via AJAX on the front end."""
         # this can only be reached if user is logged in, but just in case,
         #  we check for user:
         if self.user:
             # get post id from Ajax script
-            postID = int(self.request.get('postID'))
+            post_id = int(self.request.get('postID'))
             # retrieve post entity from datastore
-            post = Post.get_by_id(postID)
-            # retrieve user id from initialise function
+            post = Post.get_by_id(post_id)
+            # retrieve user id from initialise method
             uid = self.user.key.id()
             # stop people from liking their own stuff
             if uid == post.author_key:

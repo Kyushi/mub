@@ -1,5 +1,7 @@
+"""This module handles the user signup"""
+
 import re
-from handler import GeneralHandler, make_secure_val, check_secure_val, User
+from handler import GeneralHandler, User
 
 # helper functions to verify user input
 USER_RE = re.compile(r"^[a-zA-Z0-9_-]{3,20}$")
@@ -18,13 +20,13 @@ def validate_email(email):
     return EMAIL_RE.match(email) or True
 
 
-# Handler for the signup page
 class SignupHandler(GeneralHandler):
-    # render signup form
+    """Handler for the signup page"""
     def get(self):
         self.render("signup.html")
 
     def post(self):
+        """Upon posting the signup form we validate user input"""
         # get user input and initialise error messages
         self.username = self.request.get("username")
         self.password = self.request.get("password")
@@ -56,39 +58,43 @@ class SignupHandler(GeneralHandler):
         # if there is an error, render signup form with user input and error
         # messages
         else:
-            self.render("signup.html", username = self.username,
-                                       password = self.password,
-                                       verify = self.verify,
-                                       email = self.email,
-                                       error1 = self.error1,
-                                       error2 = self.error2,
-                                       error3 = self.error3,
-                                       error4 = self.error4)
+            self.render("signup.html",
+                        username=self.username,
+                        password=self.password,
+                        verify=self.verify,
+                        email=self.email,
+                        error1=self.error1,
+                        error2=self.error2,
+                        error3=self.error3,
+                        error4=self.error4)
 
-    # here just so things don't break
     def done(self, *a, **kw):
+        """This is just a placeholder which does not get called"""
         raise NotImplementedError
 
 # this handles the actual registration
 class RegisterHandler(SignupHandler):
+    """This class handles the actual registration after validation"""
     def done(self):
+        """We're using the done method here since we inherit from the
+        SignupHandler"""
         # check if username is already registered
         u = User.by_name(self.username.lower()) # case doesn't matter
         if u:
             self.error1 = "This username already exists"
-            self.render("signup.html", error1 = self.error1)
+            self.render("signup.html", error1=self.error1)
         else:
             u = User.register(self.username, self.password, self.email)
             u.put()
             self.login(u)
             self.redirect('/welcome')
 
-# render welcome page if user signed up successfully,
-# otherwise redirect to signup
 class WelcomeHandler(GeneralHandler):
+    """Render welcome page if user signed up successfully,
+    otherwise redirect to signup"""
     def get(self):
         user = self.user
         if user:
-            self.render('welcome.html', user = user)
+            self.render('welcome.html', user=user)
         else:
             self.redirect("/signup")

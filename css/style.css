@@ -6,280 +6,133 @@
   box-sizing: border-box;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
-  -ms-box-sizing: border-box;
-}
+  -ms-box-sizing: border-box; }
 
 /* general styles for entire body */
 body {
   font-family: Roboto, "Helvetica Neue", sans-serif;
-  font-size: 15px;
-}
-
-/* setting up cols for grid system */
-.col-12, .row {
-  width: 100%;
-}
-
-.col-11 {
-  width: 91.6666%;
-}
-
-.col-10 {
-  width: 83.3333%;
-}
-
-.col-9 {
-  width: 75%;
-}
-
-.col-8 {
-  width: 66.6666%;
-}
-
-.col-7 {
-  width: 58.3333%
-}
-
-.col-6 {
-  width: 50%;
-}
-
-.col-5 {
-  width: 41.6666%;
-}
-
-.col-4 {
-  width: 33.3333%;
-}
-
-.col-3 {
-  width: 25%;
-}
-
-.col-2 {
-  width: 16.6666%;
-}
-
-.col-1 {
-  width: 8.3333%;
-}
+  font-size: 15px; }
 
 /* header sizes, weights and colours */
 h1 {
   font-size: 35px;
-  text-transform: capitalize;
-}
+  text-transform: capitalize; }
 
 h2 {
   font-size: 25px;
-  color: #cddac7;
-}
+  color: #cddac7; }
 
 h3 {
   font-size: 20px;
-  color: #dac7cd;
-}
+  color: #dac7cd; }
 
 h4 {
-  font-size: 18px;
-}
+  font-size: 18px; }
 
 h5 {
-  font-size: 15px;
-}
-
+  font-size: 15px; }
 
 h1,
 h2,
 h5 {
-  font-weight: 300;
-}
+  font-weight: 300; }
 
 h3,
 h4 {
-  font-weight: 200;
-}
+  font-weight: 200; }
 
 /* general styles for paragraphs and links */
 p,
 a {
-  font-weight: 300;
-}
+  font-weight: 300; }
 
 a {
-  text-decoration: none;
-}
+  text-decoration: none; }
 
 a:hover {
-  text-decoration: underline;
-}
-
-.content {
-  width: 100%;
-  max-width: 960px;
-  margin: 0 auto;
-}
+  text-decoration: underline; }
 
 /* header styles */
 header {
-  padding: 1em 0;
   font-family: 'Cormorant', serif;
-  font-weight: 300;
-}
+  font-weight: 300; }
 
 .logo, .logo:hover {
   text-decoration: none;
-  color: #333;
-}
+  color: #333; }
 
 /* menu styles */
 nav {
-  width: 100%;
-}
-
-.menu {
-  width: 100%;
-  display: flex;
-  flex-wrap: no-wrap;
-}
+  width: 100%; }
 
 .menu-item {
-  display:block;
-  width: 20%;
-}
+  display: block; }
 
 /* content styles */
 .section-header {
-  padding: 0.67em 0;
-  font-family: 'Lora', serif;
-}
-
-article {
-  max-width: 100%
-}
-
-td {
-  padding: 0.33em 0;
-}
+  font-family: 'Lora', serif; }
 
 .blog-article {
-  border: 1px solid #cddac7;
-  padding: 0.67em;
-  margin: 0.33em 0;
-  display: flex;
-  flex-wrap: wrap;
-}
+  margin-bottom: 0.67em;
+  border: 1px solid #cddac7; }
 
-.date,
-.author {
-  text-align: right;
-  font-size: 12px;
+.date {
   color: #cddac7;
-}
-
-.padded {
-  padding: 0.33em 0;
-}
+  margin-top: 0.33em; }
 
 .grey {
-  color: #cddac7;
-}
+  color: #cddac7; }
 
 .small {
-  font-size: 12px;
-}
+  font-size: 12px; }
+
+.border-top {
+  border-top: 1px solid #dac7cd; }
 
 /* input styles */
-
-.input-title {
-  padding: 0.33em 0;
-}
-
-button {
-  margin: 0.67em 0;
-  padding: 0.33em;
-}
-
 .post-input,
 .title-input {
-  width: 400px;
-}
+  width: 400px; }
 
 .post-input {
-  height: 300px;
-}
+  height: 300px; }
 
 .post-title {
   font-family: 'Cormorant', serif;
   font-weight: 400;
-}
+  padding-bottom: 0; }
 
 .post-text {
-  margin: 0.67em 0;
-}
-
+  margin: 0.67em 0; }
 
 .error {
-  color: #f00;
-  /*transition: opacity 1s ease-in;*/
-}
+  color: #f00; }
 
 .comments {
-  border: 1px solid #ccc;
-  padding: 0.33em;
-  /*padding-right: 0.67em;
-  padding-left: 0.67em;*/
-}
+  border: 1px solid #cdc7da;
+  margin-bottom: 0.33em; }
 
 .comment-placeholder {
-  padding: 0.33em 0;
-  /*border: 1px solid #cddac7;*/
-  margin-bottom: 0.33em;
-  margin-top: 0.33em;
   color: #cdc7da;
-}
+  padding: 0.33em 0; }
 
 .comment-input-form {
-  display: none;
-  width: 100%;
-}
-
-.comment-edit-form {
-  display: none;
-}
+  display: none; }
 
 .comment-input {
+  margin-top: 0.33em;
   padding: 0.33em;
-  width: 100%;
-}
+  border: 1px solid #cddac7; }
 
-/*.submit-button {
-  display: block;
-  margin: 0.33em;
-  padding: 0.33em;
-  border: 1px solid #cddac7;
-  background: #cddac7;
-  text-align: center;
-  font-size: 12px;
-  color: #80887b;
-}
+.comment-edit-form {
+  display: none; }
 
-.submit-button:hover {
-  text-decoration: none;
-  color: #fff;
-}*/
-
-.single-comment {
-  border-bottom: 1px solid #cdc7da;
-}
 /*footer styles */
-
-
 /* zocial */
 [class*="zocial-"]:before {
-  font-family: 'zocial', sans-serif;
-}
+  font-family: 'zocial', sans-serif; }
 
 [class*="zocial-"]:hover {
-  text-decoration: none;
-}
+  text-decoration: none; }
+
+/*# sourceMappingURL=style.css.map */

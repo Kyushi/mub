@@ -1,3 +1,6 @@
+"""This module provides general handling and helper functions, as well as Models
+for users, posts and comments"""
+
 import webapp2
 import jinja2
 import os
@@ -9,57 +12,60 @@ import hashlib
 
 from google.appengine.ext import ndb
 
-secret = 'BWMJs?Tzp2WLGT*PNEv@7Fq5W9GtW#?7'
+SECRET = 'BWMJs?Tzp2WLGT*PNEv@7Fq5W9GtW#?7'
 
 template_dir = os.path.join(os.path.dirname(__file__), 'templates')
-jinja_env = jinja2.Environment(loader = jinja2.FileSystemLoader(template_dir),
-                               autoescape = True)
+jinja_env = jinja2.Environment(loader=jinja2.FileSystemLoader(template_dir),
+                               autoescape=True)
 
 # TODO: add write to datastore function for post and comment classes
-# Model for blog Post
+
 class Post(ndb.Model):
-    subject = ndb.StringProperty(required = True)
-    content = ndb.TextProperty(required = True)
-    created = ndb.DateTimeProperty(auto_now_add = True)
+    """Model for blog Post"""
+    subject = ndb.StringProperty(required=True)
+    content = ndb.TextProperty(required=True)
+    created = ndb.DateTimeProperty(auto_now_add=True)
     last_modified = ndb.DateTimeProperty()
-    author = ndb.StringProperty(required = True)
+    author = ndb.StringProperty(required=True)
     author_key = ndb.IntegerProperty()
     likes = ndb.IntegerProperty()
-    liked_by = ndb.IntegerProperty(repeated = True)
+    liked_by = ndb.IntegerProperty(repeated=True)
 
-    # helper function to render blog text with line breaks
     def render(self):
+        """helper function to render blog text with line breaks"""
         self._render_text = self.content.replace('\n', '\n<br>')
         return self._render_text
 
-    # helper function to display fetch all comments for their respective post
-    # from the datastore
-    def comments(self):
+    def get_comments(self):
+        """helper function to display fetch all comments for their respective post
+        from the datastore"""
         self.comments = Comment.query(ancestor=self.key).order(-Comment.created).fetch()
         return self.comments
 
-# Model for comments:
+
 class Comment(ndb.Model):
+    """Model for comments"""
     content = ndb.StringProperty(required=True)
-    author_id = ndb.IntegerProperty(required = True)
-    author_name = ndb.StringProperty(required = True)
-    created = ndb.DateTimeProperty(auto_now_add = True)
+    author_id = ndb.IntegerProperty(required=True)
+    author_name = ndb.StringProperty(required=True)
+    created = ndb.DateTimeProperty(auto_now_add=True)
     last_modified = ndb.DateTimeProperty()
     likes = ndb.IntegerProperty()
-    liked_by = ndb.IntegerProperty(repeated = True)
+    liked_by = ndb.IntegerProperty(repeated=True)
 
-# Model for users
+
 class User(ndb.Model):
-    username = ndb.StringProperty(required = True)
-    name_by_user = ndb.StringProperty(required = True)
-    pw_hash = ndb.StringProperty(required = True)
+    """Model for users"""
+    username = ndb.StringProperty(required=True)
+    name_by_user = ndb.StringProperty(required=True)
+    pw_hash = ndb.StringProperty(required=True)
     email = ndb.StringProperty()
-    register_date = ndb.DateTimeProperty(auto_now_add = True)
-    likes = ndb.IntegerProperty(repeated = True)
+    register_date = ndb.DateTimeProperty(auto_now_add=True)
+    likes = ndb.IntegerProperty(repeated=True)
 
     @classmethod
     def by_id(cls, uid):
-        return cls.get_by_id(uid, parent = users_key())
+        return cls.get_by_id(uid, parent=users_key())
 
     @classmethod
     def by_name(cls, name):
@@ -68,11 +74,11 @@ class User(ndb.Model):
     @classmethod
     def register(cls, name, pw, email=None):
         pw_hash = make_hash(name.lower(), pw)
-        return cls(parent = users_key(),
-                   username = name.lower(),
-                   name_by_user = name,
-                   pw_hash = pw_hash,
-                   email = email)
+        return cls(parent=users_key(),
+                   username=name.lower(),
+                   name_by_user=name,
+                   pw_hash=pw_hash,
+                   email=email)
 
     @classmethod
     def login(cls, name, pw):
@@ -80,9 +86,9 @@ class User(ndb.Model):
         if u and valid_hash(name.lower(), pw, u.pw_hash):
             return u
 
-# make users key (for possible later use to have user groups, such as admin, mod
-# etc.)
-def users_key(group = 'default'):
+def users_key(group='default'):
+    """make users key (for possible later use to have user groups, such as
+    admin, mod etc.)"""
     return ndb.Key('users', group)
 
 # functions for hashing and checking hashed user login info
@@ -90,7 +96,7 @@ def make_salt():
     salt = ''.join(random.choice(string.letters) for x in xrange(7))
     return salt
 
-def make_hash(name, pw, salt = None):
+def make_hash(name, pw, salt=None):
     if not salt:
         salt = make_salt()
     h = hashlib.sha256(name + pw + salt).hexdigest()
@@ -103,7 +109,7 @@ def valid_hash(name, pw, h):
 
 # make uid|hash pair for cookie
 def make_secure_val(val):
-    return "%s|%s" %(val, hmac.new(secret, val).hexdigest())
+    return "%s|%s" %(val, hmac.new(SECRET, val).hexdigest())
 
 # check uid/hash pair for validity
 def check_secure_val(secure_val):
@@ -111,9 +117,10 @@ def check_secure_val(secure_val):
     if secure_val == make_secure_val(val):
         return val
 
-# Handler that gets imported into more or less all other handlers that allows
-# makes certain actions easier
+
 class GeneralHandler(webapp2.RequestHandler):
+    """Handler that gets imported into more or less all other handlers that
+    makes certain actions easier"""
     def write(self, *a, **kw):
         self.response.out.write(*a, **kw)
 
@@ -138,19 +145,19 @@ class GeneralHandler(webapp2.RequestHandler):
         comments = c.fetch()
         return comments
 
-    # renders a single comment including all html, so that it can be inserted
-    # via ajax
     def render_single_comment(self, comment):
+        """renders a single comment including all html, so that it can be inserted
+        via ajax"""
         html = '''
-                <div class="comment-edit-form">
+                <div class="comment-edit-form col-xs-12">
                     <form method="post" class="edit-form">
-                        <textarea name="edit-comment" class="comment-input">%s</textarea>
+                        <textarea name="edit-comment" class="comment-input col-xs-12">%s</textarea>
                         <a href="#" data-commentid="%s;%s" class="save-button">Save</a> |
                         <a href="#" class="cancel-button">Cancel</a>
                     </form>
                   <p class="error"><p>
                 </div>
-                <div class="single-comment single">
+                <div class="single-comment single col-xs-12">
                     <p class="grey small">%s said:</p>
                     <p class="comment-content">%s</p>
                     <a href="#" class="edit">Edit</a> |
@@ -165,18 +172,18 @@ class GeneralHandler(webapp2.RequestHandler):
                        comment.key.parent().id())
         return html
 
-    # get referrer or set referrer to index for use in cancel
     def get_referrer(self):
+        """get referrer or set referrer to index for use in cancel"""
         return self.request.referer or "/"
 
-    # set the cookie with user id and hash
     def set_secure_cookie(self, name, val):
+        """set the cookie with user id and hash"""
         cookie_val = make_secure_val(val.lower())
         self.response.headers.add_header('Set-Cookie', '%s=%s; Path="/"'\
                                          % (name.lower(), cookie_val))
 
-    # read the cookie and make sure the uid/hash pair is valid
     def read_secure_cookie(self, name):
+        """read the cookie and make sure the uid/hash pair is valid"""
         cookie_val = self.request.cookies.get(name)
         return cookie_val and check_secure_val(cookie_val)
 
@@ -186,8 +193,8 @@ class GeneralHandler(webapp2.RequestHandler):
     def logout(self):
         self.response.headers.add_header('Set-Cookie', 'user_id=; Path="/"')
 
-    # check if user is logged in and set global user if yes
     def initialize(self, *a, **kw):
+        """check if user is logged in and set global user if yes"""
         webapp2.RequestHandler.initialize(self, *a, **kw)
         uid = self.read_secure_cookie('user_id')
         self.user = uid and User.by_id(int(uid))

@@ -7,96 +7,112 @@
 {% block newpost %}
 {% endblock %}
 <!-- display blog posts -->
-<section class="blog-posts">
+<section class="blog-posts col-xs-12">
   <h2 class="section-header">Read about it:</h2>
   <!-- show all existing blog posts -->
   {% for post in posts %}
-  <article class="blog-article single">
-    <div class="post-title col-9">
-      <h3>{{post.subject}}</h3>
+  <article class="blog-article single col-xs-12">
+    <!-- Post subject and created date -->
+
+    <div class="row post-subject-date">
+      <div class="date small col-xs-12">
+        {{post.created.strftime("%d %B %Y, %H:%M")}}, by {{post.author}}
+      </div>
+
+      <div class="post-title col-xs-12">
+        <h3>{{post.subject}}</h3>
+      </div>
+
     </div>
-    <div class="date col-3">
-      {{post.created.strftime("%d %B %Y, %H:%M")}}, by {{post.author}}
-    </div>
-    <div class="post-text col-12">
+    <!-- Post text -->
+    <div class="post-text row">
       <p class="post">{{post.render() |safe }}</p>
     </div>
-    <div class="padded small col-1">
-      <a href="/{{post.key.id()}}">Permalink</a>
-    </div>
-    <div class="edit-delete grey small padded col-1">
-    <!-- Show edit link only for own blog posts -->
-      {% if user %}
-        {% if user.key.id() == post.author_key %}
-          <a href="/editpost/{{post.key.id()}}">Edit</a> |
-          <a href="#" data-ids="{{post.key.id()}}" class="delete">Delete</a>
+
+    <div class="post-details row">
+      <!-- show different links for likes, depending on user or
+      visitor (not logged in)-->
+      <div class="col-xs-4 small">
+        {% if user %}
+        <p>
+          <a href="#" class="like" data-key="{{post.key.id()}}">
+            ↑ <span>{{post.likes}}</span> Likes
+          </a>
+          {% if user.key.id() in post.liked_by %}
+            <span class="you-like grey small">You like this</span>
+          {% endif %}
+        </p>
+        {% else %}
+        <p>
+          <a href="/login" class="no-user-like">↑
+          <span>{{post.likes}}</span> Likes</a>
+        </p>
         {% endif %}
-      {% endif %}
-    </div>
-    <div class="col-1 small padded">
-      <!-- show different links, depending on user or visitor (not logged in)-->
-      {% if user %}
-      <p>
-        <a href="#" class="like" data-key="{{post.key.id()}}">
-          ↑ <span>{{post.likes}}</span> Likes
-        </a>
-      </p>
-      {% else %}
-      <p>
-        <a href="/login" class="no-user-like">↑ <span>{{post.likes}}</span> Likes</a>
-      </p>
-      {% endif %}
-    </div>
-    <div class="col-1 grey small padded">
-      <!-- show that user likes this if they do -->
-      {% if user %}
-        {% if user.key.id() in post.liked_by %}
-          <p class="you-like">You like this</p>
+      </div>
+
+      <!-- Show edit and delete link only for own blog posts -->
+      <div class="edit-delete grey small col-xs-4">
+        {% if user %}
+          {% if user.key.id() == post.author_key %}
+            <a href="/editpost/{{post.key.id()}}">Edit</a> |
+            <a href="#" data-ids="{{post.key.id()}}" class="delete">Delete</a>
+          {% endif %}
         {% endif %}
-      {% endif %}
-    </div>
-    <!-- div for error messages -->
-    <div class="col-4 padded small">
-      <p class="error">{{error}}<p>
-    </div>
-    <div class="padded grey small date col-4">
+      </div>
+
       <!-- show edited time and date only if post has been edited -->
-      {% if post.last_modified %}
-        Edited {{post.last_modified.strftime("%d %B %Y, %H:%M")}}
-      {% endif %}
+      <div class=" grey small col-xs-6">
+        {% if post.last_modified %}
+          Edited {{post.last_modified.strftime("%d.%m.'%y, %H:%M")}}
+        {% endif %}
+      </div>
+
+      <!-- div for error messages -->
+      <div class="error small col-xs-6">
+        <p>{{error}}<p>
+      </div>
+
+      <!-- Permalink -->
+      <div class="small col-xs-12">
+        <a href="/{{post.key.id()}}">Permalink</a>
+      </div>
+
     </div>
 
     <!-- add div for all comments -->
-    <div class="comments col-12 padded small">
+    <div class="comments small col-xs-12">
       <p class="error">{{error}}</p>
       <!-- show comment text input if user is logged in -->
-    {% if user %}
+      {% if user %}
       <!-- when user clicks on placeholder text, comment form is shown -->
-      <div class="comment-placeholder col-2">
+      <div class="comment-placeholder col-xs-12">
         <p>Say something about it</p>
       </div>
-      <form method="post" class="comment-input-form">
-        <label>
-          <textarea name="comment" class="comment-input" placeholder="Give us a piece of your mind"></textarea>
-          <a href="#" data-parentid="{{post.key.id()}}" class="submit-button col-1">Say it</a> | 
-          <a href="#" class="cancel-comment col-1">Cancel</a>
+
+      <form method="post" class="comment-input-form row">
+        <label class="col-xs-12">
+          <textarea name="comment" class="comment-input col-xs-12" placeholder="Give us a piece of your mind"></textarea>
+          <a href="#" data-parentid="{{post.key.id()}}" class="submit-button">Say it</a> |
+          <a href="#" class="cancel-comment">Cancel</a>
         </label>
       </form>
+
       {% if error %}
-        <div class="col-12 padded small">
-          <p class="error">
-            {{error}}
-          </p>
-        </div>
+      <div class="col-xs-12 small">
+        <p class="error">
+          {{error}}
+        </p>
+      </div>
       {%endif %}
-    {% endif %}
+
+      {% endif %}
       <!-- show all comments for this post -->
-      <div class="comment-list">
-        {% for comment in post.comments() %}
+      <div class="comment-list row">
+        {% for comment in post.get_comments() %}
           <!-- hidden comment edit form gets displayed when user clicks edit -->
-          <div class="comment-edit-form">
+          <div class="comment-edit-form col-xs-12">
             <form method="post" class="edit-form">
-              <textarea name="edit-comment" class="comment-input">{{comment.content}}</textarea>
+              <textarea name="edit-comment" class="comment-input col-xs-12">{{comment.content}}</textarea>
               <a href="#" data-commentid="{{comment.key.id()}};{{post.key.id()}}" class="save-button">Save</a> |
               <a href="#" class="cancel-button">Cancel</a>
             </form>
@@ -104,8 +120,8 @@
           </div>
 
           <!-- div for each comment -->
-          <div class="single-comment single">
-            <p class="grey small">{{comment.author_name}} said:</p>
+          <div class="single-comment single col-xs-12">
+            <p class="grey small border-top">{{comment.author_name}} said:</p>
             <p class="comment-content">
               {{comment.content | safe}}
             </p>

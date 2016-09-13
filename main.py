@@ -12,8 +12,7 @@ __status__ = "WIP"
 
 import webapp2
 from handler import GeneralHandler
-from login import LoginHandler
-from logout import LogoutHandler
+from login import LoginHandler, LogoutHandler
 from signup import RegisterHandler, \
                    WelcomeHandler
 from blogfunctions import NewPostHandler, \
