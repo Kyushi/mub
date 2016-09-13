@@ -97,7 +97,7 @@ nav {
 
 /* input styles */
 .submit-login,
-.submit-newpost {
+.submit-post {
   background: #cddac7;
   color: #eee;
   font-size: 12px;
@@ -106,7 +106,7 @@ nav {
   border: None; }
 
 .submit-login:hover,
-.submit-newpost:hover {
+.submit-post:hover {
   color: #fff;
   background: #dac7cd; }
 
@@ -142,7 +142,8 @@ nav {
 .form-input {
   margin-top: 0.33em;
   padding: 0.33em;
-  border: 1px solid #cddac7; }
+  border: 1px solid #cddac7;
+  font-weight: 300; }
 
 .comment-edit-form {
   display: none; }

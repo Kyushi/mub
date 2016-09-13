@@ -158,7 +158,7 @@ class GeneralHandler(webapp2.RequestHandler):
                   <p class="error"><p>
                 </div>
                 <div class="single-comment single col-xs-12">
-                    <p class="grey small">%s said:</p>
+                    <p class="grey small border-top">%s said:</p>
                     <p class="comment-content">%s</p>
                     <a href="#" class="edit">Edit</a> |
                     <a href="#" data-ids="%d;%d" class="delete">Delete</a>
