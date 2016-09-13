@@ -1,5 +1,3 @@
-*This is a work in progress and not fully functional yet.*
-
 # tellmeallaboutit #
 
 
@@ -23,23 +21,15 @@ http://fsnd-mub-project.appspot.com/
 1. Clone or download this repository from https://github.com/Kyushi/mub.git
 * Install Google App Engine Launcher
 * Select File -> Add Existing Application
-* Find downloaded repository and add containing folder to Google Ap Engine Launcher
-* Select project in list and click 'Run' (you may have to allow incoming traffic to the app)
-* Click 'Browse'
+* Find downloaded repository and add containing folder to Google App Engine Launcher
+* Select project in list and click 'Run'
+* Click 'Browse' in GAE
 
 ---
-### Test functionality ###
 
-1. Click 'Signup', enter username, password (+verification), add e-mail (optional). The username can be 3-20 characters long and include letters, digits, underscores and dashes.
-2. Username, Logout option and option to write a blog post should appear in the menu, cookie with user id and hash will be set.
-3. Try logging out and in again
-4. Write a blog post
-5. After submission, you will be redirected to the single blog entry on its permalinked page
-6. Try liking the blog post (error message appears)
-7. Comment on the blog post
-8. Edit blog post ("Edited + datetime" should appear in the bottom left corner of the post)
-9. Sign out and create another user
-10. Write blog post with other user.
-11. Try liking others' blog posts (like and unlike). Like count should go up/down, 'You like this' should appear/disappear
-12. Comment on blog posts, edit comments.
-13. Sign out and grade ;)
+### Explanation ###
+
+This is a blog project. A visitor to the page can create a user account. As a registered user, the visitor can login/logout, write a blog post, comment on others' or own blog posts, edit/delete their own posts or comments, and like others' posts.
+When a user deletes their own post, all comments about the post get deleted as well.
+The project is based on Google's App Engine with Python 2.7. The front-end uses Bootstrap's grid layout with a mobile-first approach (due to the current simplicity of the project, it is actually mobile-only non-responsive, i.e. there are no breakpoints to change the layout).
+Liking and commenting is handled via AJAX, so that the user is not taken out of the flow when using those parts of the page.
