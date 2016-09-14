@@ -11,17 +11,18 @@ __email__ = "info@franziskusnakajima.net"
 __status__ = "WIP"
 
 import webapp2
-from handler import GeneralHandler
-from login import LoginHandler, LogoutHandler
-from signup import RegisterHandler, \
-                   WelcomeHandler
-from blogfunctions import NewPostHandler, \
-                          PermalinkHandler, \
-                          EditPostHandler, \
-                          CommentHandler, \
-                          EditCommentHandler, \
-                          DeleteHandler
-from likes import LikeHandler
+from handlers.generalhandler import GeneralHandler
+from handlers.login import LoginHandler, \
+                           LogoutHandler
+from handlers.signup import RegisterHandler, \
+                            WelcomeHandler
+from handlers.blogfunctions import NewPostHandler, \
+                                   PermalinkHandler, \
+                                   EditPostHandler, \
+                                   CommentHandler, \
+                                   EditCommentHandler, \
+                                   DeleteHandler
+from handlers.likes import LikeHandler
 
 
 # Main page displays only blog posts and menu

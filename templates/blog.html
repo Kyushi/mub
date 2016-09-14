@@ -40,13 +40,15 @@
           </a>
           <!-- div for error messages -->
           <span class="error"> {{error}}<span>
-          {% if user.key.id() in post.liked_by %}
-            <span class="you-like grey small"> You like this</span>
-          {% endif %}
+
+          <span class="you-like grey small">
+            {% if user.key.id() in post.liked_by %} You like this{% endif %}
+          </span>
+
         </p>
         {% else %}
         <p>
-          <a href="/login" class="no-user-like">↑
+          <a href="/login?er=1" class="no-user-like">↑
           <span>{{post.likes}}</span> Likes</a>
         </p>
         {% endif %}
