@@ -170,7 +170,6 @@ class EditCommentHandler(GeneralHandler):
         if not self.user:
             self.redirect('/login?er=1')
         else:
-            # TODO: authorisation!
             data = self.request.get('commentid').split(';')
             commentid = int(data[0])
             parentid = int(data[1])
