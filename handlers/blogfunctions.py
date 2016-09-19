@@ -182,6 +182,9 @@ class EditCommentHandler(GeneralHandler):
                     comment.put()
                     self.write(json.dumps(({'comment': \
                     self.render_commenttext(comment.content)})))
+                else:
+                    self.render('error.html', \
+                                error = "You can't edit this comment")
             else:
                 self.write(json.dumps(({'comment': "There was no comment"})))
 
