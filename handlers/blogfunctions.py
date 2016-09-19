@@ -77,11 +77,15 @@ class EditPostHandler(GeneralHandler):
             self.redirect('/login?er=1')
         else:
             post = Post.get_by_id(int(entry_id))
-            post.subject = self.request.get('subject')
-            post.content = self.request.get('content')
-            post.last_modified = datetime.datetime.now()
-            post.put()
-            self.redirect('/%d' % int(entry_id))
+            if post.author_key_id == self.user.key.id():
+                post.subject = self.request.get('subject')
+                post.content = self.request.get('content')
+                post.last_modified = datetime.datetime.now()
+                post.put()
+                self.redirect('/%d' % int(entry_id))
+            else:
+                self.render('error.html',
+                            error = "You are not authorised to edit this post.")
 
 
 class PermalinkHandler(GeneralHandler):
@@ -118,7 +122,7 @@ class DeleteHandler(GeneralHandler):
         parent_key = Post.get_by_id(parentid).key
         comment = Comment.get_by_id(entityid, parent_key)
         comment_key = comment.key
-        if self.user.key.id() == comment.author_id:
+        if self.user.key.id() == comment.author_key_id:
             comment_key.delete()
         return
 
@@ -126,7 +130,7 @@ class DeleteHandler(GeneralHandler):
         """function to delete post and all children from datastore. Children
         will not be displayed again, so deleting is best"""
         post = Post.get_by_id(entityid)
-        if self.user.key.id() == post.author_key:
+        if self.user.key.id() == post.author_key_id:
             ndb.delete_multi(ndb.Query(ancestor=post.key).iter(keys_only=True))
         return
 
@@ -143,13 +147,13 @@ class CommentHandler(GeneralHandler):
         else:
             comment = self.request.get('comment')
             parent = Post.get_by_id(int(self.request.get('parent')))
-            author_id = self.user.key.id()
+            author_key_id = self.user.key.id()
             author_name = self.user.name_by_user
             if not comment:
                 return # do nothing if user submitted empty comment
             else:
                 c = Comment.write_entity(comment,
-                                         author_id,
+                                         author_key_id,
                                          author_name,
                                          parent.key)
                 c.put()
@@ -166,6 +170,7 @@ class EditCommentHandler(GeneralHandler):
         if not self.user:
             self.redirect('/login?er=1')
         else:
+            # TODO: authorisation!
             data = self.request.get('commentid').split(';')
             commentid = int(data[0])
             parentid = int(data[1])
@@ -173,9 +178,11 @@ class EditCommentHandler(GeneralHandler):
             parent_key = Post.get_by_id(parentid).key
             comment = Comment.get_by_id(commentid, parent_key)
             if comment:
-                comment.content = newcomment
-                comment.put()
-                self.write(json.dumps(({'comment': self.render_commenttext(comment.content)})))
+                if comment.author_key_id == self.user.key.id():
+                    comment.content = newcomment
+                    comment.put()
+                    self.write(json.dumps(({'comment': \
+                    self.render_commenttext(comment.content)})))
             else:
                 self.write(json.dumps(({'comment': "There was no comment"})))
 

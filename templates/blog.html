@@ -57,7 +57,7 @@
       <!-- Show edit and delete link only for own blog posts -->
       <div class="edit-delete grey small col-xs-6">
         {% if user %}
-          {% if user.key.id() == post.author_key %}
+          {% if user.key.id() == post.author_key_id %}
             <a href="/editpost/{{post.key.id()}}">Edit</a> |
             <a href="#" data-ids="{{post.key.id()}}" class="delete">Delete</a>
           {% endif %}
@@ -127,8 +127,8 @@
             <!-- show edit and delete links only if user is logged in and only
             for own comments -->
             {% if user: %}
-              {% if user.key.id() == comment.author_id %}
-                {% if comment.author_id == user.key.id() %}
+              {% if user.key.id() == comment.author_key_id %}
+                {% if comment.author_key_id == user.key.id() %}
               <a href="#" class="edit">Edit</a> |
               <a href="#" data-ids="{{comment.key.id()}};{{post.key.id()}}" class="delete">Delete</a>
                 {% endif %}

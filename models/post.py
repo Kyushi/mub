@@ -11,7 +11,7 @@ class Post(ndb.Model):
     created = ndb.DateTimeProperty(auto_now_add=True)
     last_modified = ndb.DateTimeProperty()
     author = ndb.StringProperty(required=True)
-    author_key = ndb.IntegerProperty()
+    author_key_id = ndb.IntegerProperty()
     likes = ndb.IntegerProperty()
     liked_by = ndb.IntegerProperty(repeated=True)
 
@@ -27,10 +27,10 @@ class Post(ndb.Model):
         return self.comments
 
     @classmethod
-    def write_entity(cls, subject, content, author, author_key):
+    def write_entity(cls, subject, content, author, author_key_id):
         """Class method to write a post entity to the datastore"""
         return cls(subject=subject,
                    content=content,
                    author=author,
-                   author_key=author_key,
+                   author_key_id=author_key_id,
                    likes=0)

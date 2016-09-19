@@ -21,7 +21,7 @@ class LikeHandler(GeneralHandler):
             # retrieve user id from initialise method
             uid = self.user.key.id()
             # stop people from liking their own stuff
-            if uid == post.author_key:
+            if uid == post.author_key_id:
                 error = "You can only rate others' comments"
                 self.write(json.dumps(({'error': error})))
             elif uid in post.liked_by:
